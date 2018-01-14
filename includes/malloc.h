@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   malloc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
+/*   By: Louis-Marie <Louis-Marie@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/11 18:29:09 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/01/15 00:50:39 by Louis-Marie      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct      s_meta
 {
 	t_type			type;
 	void			*ptr;
-	int				size_left;
+	size_t			size_left;
 }                   t_meta;
 
 extern t_meta   	*meta;

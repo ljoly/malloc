@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 18:09:38 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/11 18:20:28 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/01/21 21:26:36 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ int main(void)
 
     ft_printf("sizeof t_meta: %d\n", sizeof(t_meta));
     s1 = (char *)ft_malloc(sizeof(char) * 5);
+    printf("%zu\n", ft_strlen(s1));
+    ft_putendl("ICI");
     s1[0] = '1';
+    ft_putendl("AH");
     s1[1] = '2';
     s1[2] = '3';
     s1[3] = '4';

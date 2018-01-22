@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   malloc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Louis-Marie <Louis-Marie@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/15 00:50:39 by Louis-Marie      ###   ########.fr       */
+/*   Updated: 2018/01/21 21:26:30 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,18 @@
 # define TINY_MAX_SIZE 992
 # define SMALL_MAX_SIZE 1000000000
 
+/*
+** Blocks are subzones of Zones. Meta is an array of meta data.
+*/
 typedef enum        e_type
 {
 	META,
-    TINY,
-    SMALL,
-    LARGE,
-	TINY_RANGE,
-	SMALL_RANGE,
-	LARGE_RANGE
+    TINY_BLOCK,
+    SMALL_BLOCK,
+    LARGE_BLOCK,
+	TINY_ZONE,
+	SMALL_ZONE,
+	LARGE_ZONE
 }                   t_type;
 
 typedef struct      s_meta

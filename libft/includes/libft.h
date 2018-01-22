@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/24 16:14:13 by ljoly             #+#    #+#             */
-/*   Updated: 2017/07/06 15:12:44 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/01/21 21:27:07 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@
 # define CYAN "\033[0;36m"
 # define WHITE "\033[0;37m"
 # define NC "\033[0m"
+
+typedef char            t_bool;
+
+# define TRUE           1
+# define FALSE          0
 
 typedef struct	s_list
 {

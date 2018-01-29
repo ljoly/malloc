@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/26 19:17:48 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/01/29 19:07:48 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,29 @@ static void      map_region(t_type type, size_t region_size)
 }
 
 /*
-** Check if the required zone was already allocated or not
+** Check if the required zone (regions or block) was already allocated
 */ 
-static void   *get_available_region(t_type type, size_t size)
+static t_meta   *get_available_zone(t_type type, size_t size, size_t quantum)
 {
-    int         i;
-    size_t      size_to_map;
+    unsigned long   i;
+    size_t          size_to_map;
+    t_meta          *ptr;
 
     i = 1;
-    size_to_map = size / TINY_QUANTUM;
-    if (size % TINY_QUANTUM)
-        size_to_map // calculate size to map regarding quantums                 //  H E R E
+    ptr = NULL;    
+    size_to_map = size / quantum;
+    if (size % quantum)
+        size_to_map++;
+    size_to_map *= quantum;                                   // HERE
     while (i < getpagesize() - meta[0].size_left)
     {
-        if (meta[i].type == type && meta[i].size_left >= size)
+        if (meta[i].type == type && meta[i].size_left >= size_to_map)
         {
             return meta + i;
             // ptr = meta[i].ptr;
             break;
         }
             i++;
-        }
-        if (is_zone == TRUE)
-        {
-            while (i <= getpagesize() - meta[0].size_left)
-                i++;
-            ptr = meta[i].ptr;
         }
 }
 
@@ -66,7 +63,7 @@ static void *map_data(size_t size)
     ft_putendl("ADD_DATA");
     if (size <= TINY_MAX)
     {
-        if ((ptr = get_available_region(TINY_REGION, size)))
+        if ((ptr = get_available_zone(TINY_REGION, size, TINY_QUANTUM)))
         {
             // get_available_block(); >>> get_available_zone() for both bocks and zones
         }

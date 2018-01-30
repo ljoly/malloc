@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/29 19:09:35 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/01/30 19:39:13 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ typedef enum        e_type
 	META,
     TINY_BLOCK,
     SMALL_BLOCK,
-    LARGE_BLOCK,
+	TINY_FREED,
+	SMALL_FREED,
+	LARGE_FREED,
 	TINY_REGION,
 	SMALL_REGION,
 	LARGE_REGION

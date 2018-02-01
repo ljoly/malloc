@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/30 20:22:24 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/01 19:46:22 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static size_t   quantum_size_to_map(size_t size)
 }
 
 /*
-** Map zone (ie. region or block)
+** Maps a requested zone (ie. region or block)
 */
 static void      map_zone(t_type type, void *at)
 {
@@ -53,61 +53,75 @@ static void      map_zone(t_type type, void *at)
     ft_putendl("REGION MAPPED");
 }
 
+// 
+
 /*
-** Check if the required zone (ie. region OR block) was already allocated
+** Checks if the required zone (ie. region OR block) was already allocated and returns it
 */ 
-static t_meta   *get_available_zone(t_type type, size_t size_to_map, size_t region_size)
+static size_t   get_available_zone(t_req *r, t_type type)
 {
-	unsigned long   i;
+	size_t      i;
 
     i = 1;
-    while (i < getpagesize() - meta[0].size_left)
-    {
-        if (meta[i].type == type && meta[i].size_left >= size_to_map)
+    if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_REGION)
+    {   
+        while (i < getpagesize() - meta[0].size_left)
         {
-            return meta[i].ptr + ;
-            // ptr = meta[i].ptr;
-        }
+            if (meta[i].type == type && meta[i].size_left >= r->size_to_map)
+            {
+                r->zone = meta[i].ptr + (r->region_size - meta[i].size_left + 1);
+                return i;
+            }
             i++;
+        }
     }
-    return NULL;
+    else
+    {
+        while (i < getpagesize() - meta[0].size_left)
+        {
+            if (meta[i].type == type && meta[i].ptr == r->zone)
+                return i;
+            i++;
+        }
+    }
+    return 0;
 }
 
 static void *map_data(size_t size)
 {
     int     i;
     void    *ptr;
-    size_t  size_to_map;
-    t_type  region;
-    t_type  block;
-    size_t  region_size;
+    t_req   r;
 
     i = getpagesize() - meta[0].size_left;
     ptr = NULL;
-    size_to_map = quantum_size_to_map(size);
-    region = LARGE_REGION;
-    block = LARGE_FREED;
-    region_size = size;
+    r.size_to_map = quantum_size_to_map(size);
+    // r.region = LARGE_REGION;                // DEAL WITH LARGE LATER
+    // r.block = LARGE_FREED;
+    r.region_size = size;
+    r.index = 0;    
     if (size <= TINY_MAX)
     {
-        region = TINY_REGION;
-        region_size = T_REGION_SIZE;
-        block = TINY_FREED;
+        r.region = TINY_REGION;
+        r.region_size = T_REGION_SIZE;
+        r.block = TINY_FREED;
     }
     else if (size <= SMALL_MAX)
     {
-        region = SMALL_REGION;
-        region_size = S_REGION_SIZE;
-        block = SMALL_FREED;
+        r.region = SMALL_REGION;
+        r.region_size = S_REGION_SIZE;
+        r.block = SMALL_FREED;
     }
-    if ((ptr = get_available_zone(region, size_to_map, region_size)))
+    if ((r.index = get_available_zone(&r, r.region)))
     {
         ft_putendl("AVAILABLE REGION FOUND !");
-        if ((ptr = get_available_zone(block, size_to_map, )))
+        if ((get_available_zone(&r, r.block)))
+        {
             ft_putendl("AVAILABLE BLOCK FOUND !");
-            map_zone(block);
+            map_zone(r.block);                          // HERE
+        }
         else
-            map_zone(block);
+            map_zone(r.block);
     }
     else
     {

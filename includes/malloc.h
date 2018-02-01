@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/01/30 19:39:13 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/01 19:45:15 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,25 @@ typedef enum        e_type
 typedef struct      s_meta
 {
 	t_type			type;
-	void			*ptr;
+	char			*ptr;
 	size_t			size_left;
 }                   t_meta;
 
 extern t_meta   	*meta;
+
+/*
+** Specs of the requested zone
+*/
+typedef struct		s_req
+{
+	t_type			region;
+	t_type			block;	
+	size_t			region_size;
+	size_t			size_to_map;
+	size_t			index;
+	char			*zone;
+}					t_req;
+
 
 void				*ft_malloc(size_t size);
 void 				*malloc(size_t size);

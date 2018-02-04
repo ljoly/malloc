@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/01 19:46:22 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/04 21:58:26 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,30 @@ static size_t   quantum_size_to_map(size_t size)
 /*
 ** Maps a requested zone (ie. region or block)
 */
-static void      map_zone(t_type type, void *at)
+static void      map_zone(t_req *r, t_type type, t_bool new_block)
 {
     int         i;
 
-    meta[0].size_left--;
-    i = getpagesize() - meta[0].size_left - 1;
-    meta[i].type = type;
-    if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_REGION)
+    i = meta[0].type - meta[0].size_left;
+    if (type >= TINY_REGION)
     {
-        meta[i].ptr = mmap(0, region_size, MMAP_FLAGS, -1, 0);
+        ft_printf("TYPE = %d, INDEX = %d\n", type, i);
+        meta[i].type = type;        
+        meta[i].ptr = mmap(0, r->region_size, MMAP_FLAGS, -1, 0);
+        r->zone = meta[i].ptr;
+    }
+    else if (new_block)
+    {
+        meta[i].type = type;        
+        meta[i].ptr = r->zone;
     }
     else
     {
-        meta[i].ptr = // HERE
+        meta[r->index].type = type;
+        meta[r->index].ptr = r->zone;
     }
+    meta[0].size_left--;
+    ft_printf("SIZE LEFT = %zu\n", meta[0].size_left);
     ft_putendl("REGION MAPPED");
 }
 
@@ -65,11 +74,15 @@ static size_t   get_available_zone(t_req *r, t_type type)
     i = 1;
     if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_REGION)
     {   
-        while (i < getpagesize() - meta[0].size_left)
+        ft_printf("TYPE ASKED = %d\n", type);
+        while (i < meta[0].type - meta[0].size_left)
         {
+            ft_printf("TYPE IN META = %d\n", meta[i].type);
             if (meta[i].type == type && meta[i].size_left >= r->size_to_map)
             {
-                r->zone = meta[i].ptr + (r->region_size - meta[i].size_left + 1);
+                ft_putendl("AARRRFF");
+                r->zone = meta[i].ptr + (r->region_size - meta[i].size_left);
+                meta[i].size_left -= r->size_to_map;
                 return i;
             }
             i++;
@@ -77,23 +90,22 @@ static size_t   get_available_zone(t_req *r, t_type type)
     }
     else
     {
-        while (i < getpagesize() - meta[0].size_left)
+        while (i < meta[0].type - meta[0].size_left)
         {
             if (meta[i].type == type && meta[i].ptr == r->zone)
-                return i;
+                return (r->index = i);
             i++;
         }
     }
     return 0;
 }
 
-static void *map_data(size_t size)
+static char *map_data(size_t size)
 {
     int     i;
-    void    *ptr;
+    char    *ptr;
     t_req   r;
 
-    i = getpagesize() - meta[0].size_left;
     ptr = NULL;
     r.size_to_map = quantum_size_to_map(size);
     // r.region = LARGE_REGION;                // DEAL WITH LARGE LATER
@@ -112,25 +124,26 @@ static void *map_data(size_t size)
         r.region_size = S_REGION_SIZE;
         r.block = SMALL_FREED;
     }
-    if ((r.index = get_available_zone(&r, r.region)))
+    if ((get_available_zone(&r, r.region)))
     {
         ft_putendl("AVAILABLE REGION FOUND !");
         if ((get_available_zone(&r, r.block)))
         {
             ft_putendl("AVAILABLE BLOCK FOUND !");
-            map_zone(r.block);                          // HERE
+            map_zone(&r, r.block, FALSE);
         }
         else
-            map_zone(r.block);
+            map_zone(&r, r.block, TRUE);
+        return r.zone;
     }
     else
     {
-        map_zone(region, NULL);
+        i = meta[0].type - meta[0].size_left;
+        map_zone(&r, r.region, FALSE);
         ptr = meta[i].ptr;
-        meta[i].size_left = T_REGION_SIZE - size_to_map;
-        meta[0].size_left--;            
-        meta[++i].type = TINY_BLOCK;
-        meta[i].ptr = ptr;
+        meta[i].size_left = r.region_size - r.size_to_map;
+        map_zone(&r, r.block, TRUE);
+        
     }
     // else if (size <= SMALL_MAX_SIZE)
     // {
@@ -144,36 +157,39 @@ static void *map_data(size_t size)
 
 static void allocate_meta(void)
 {
-    t_meta *cpy;
+    // t_meta *cpy;
+    int     size;
 
-    if (meta)
-    {
-        ft_putendl("AUTRE ALLOCATION\n");
-        cpy = (t_meta *)mmap(0, sizeof(meta) + getpagesize() * sizeof(t_meta),
-            MMAP_FLAGS, -1, 0);
-        cpy = (t_meta *)ft_memcpy(cpy, meta, getpagesize());
-        if (munmap(meta, sizeof(meta)))
-        {
-            ft_putendl("ERROR");
-        }
-        else
-        {
-            meta = cpy;
-            meta[0].size_left = getpagesize();
-            ft_putendl("NEW ALLOCATION SUCCESS");
-        }
-    }
-    else
-    {
+    size = getpagesize() / sizeof(t_meta);
+    // if (meta)
+    // {
+    //     ft_putendl("AUTRE ALLOCATION\n");
+    //     cpy = (t_meta *)mmap(0, sizeof(meta) + getpagesize() * sizeof(t_meta),
+    //         MMAP_FLAGS, -1, 0);
+    //     cpy = (t_meta *)ft_memcpy(cpy, meta, getpagesize());
+    //     if (munmap(meta, sizeof(meta)))
+    //     {
+    //         ft_putendl("ERROR");
+    //     }
+    //     else
+    //     {
+    //         meta = cpy;
+            // meta[0].type += getpagesize() / sizeof(t_meta);
+    //         meta[0].ptr = (char*)meta + getpagesize();
+    //         meta[0].size_left = getpagesize();
+    //         ft_putendl("NEW ALLOCATION SUCCESS");
+    //     }
+    // }
+    // else
+    // {
         ft_putendl("ALLOCATION META");
-        meta = (t_meta *)mmap(0, getpagesize() * sizeof(t_meta),
-            MMAP_FLAGS, -1, 0);
+        meta = (t_meta *)mmap(0, size, MMAP_FLAGS, -1, 0);
         ft_bzero(meta, sizeof(meta));
-        meta[0].type = META;
-        meta[0].ptr = &meta[0].ptr;
-        meta[0].size_left = getpagesize() - 1;
+        meta[0].type = size;
+        meta[0].ptr = (char*)meta;
+        meta[0].size_left = size - 1;
         ft_putendl("ALLOCATION META DONE");
-    }
+    // }
 }
 
 static void     print(void)
@@ -181,9 +197,8 @@ static void     print(void)
     unsigned long         i;
 
     i = 0;
-    while (i < getpagesize() - meta[0].size_left)
+    while (i < meta[0].type - meta[0].size_left)
     {
-
         printf("\nmeta[%lu]:\ntype: %d\nptr: %p\nsize_left: %zu\n\n", i, meta[i].type, meta[i].ptr, meta[i].size_left);
         i++;
     }
@@ -199,7 +214,7 @@ void *ft_malloc(size_t size)
         return (NULL);
     if (!meta || (meta && !meta[0].size_left))
         allocate_meta();
-    ptr = map_data(size);
+    ptr = (void*)map_data(size);
     print();
     return (ptr);
 }

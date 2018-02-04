@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/01 19:45:15 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/02 17:42:25 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 */
 typedef enum        e_type
 {
-	META,
+	NO_TYPE,
     TINY_BLOCK,
     SMALL_BLOCK,
 	TINY_FREED,

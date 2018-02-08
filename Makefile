@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_malloc
+NAME = malloc
 
-SRC = test.c ft_malloc.c
+SRC = test.c malloc.c show_alloc_memory.c
 
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/

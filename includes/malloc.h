@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/02 17:42:25 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/08 18:23:44 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,22 @@
 */
 typedef enum        e_type
 {
-	NO_TYPE,
-    TINY_BLOCK,
-    SMALL_BLOCK,
-	TINY_FREED,
-	SMALL_FREED,
-	LARGE_FREED,
-	TINY_REGION,
-	SMALL_REGION,
-	LARGE_REGION
+/*0*/	NO_TYPE,
+/*1*/	TINY_BLOCK,
+/*2*/	SMALL_BLOCK,
+/*3*/	TINY_FREED,
+/*4*/	SMALL_FREED,
+/*5*/	LARGE_FREED,
+/*6*/	TINY_REGION,
+/*7*/	SMALL_REGION,
+/*8*/	LARGE_REGION
 }                   t_type;
 
 typedef struct      s_meta
 {
 	t_type			type;
 	char			*ptr;
-	size_t			size_left;
+	size_t			size;
 }                   t_meta;
 
 extern t_meta   	*meta;
@@ -62,14 +62,18 @@ typedef struct		s_req
 	t_type			region;
 	t_type			block;	
 	size_t			region_size;
+	size_t			size_asked;
 	size_t			size_to_map;
 	size_t			index;
 	char			*zone;
 }					t_req;
 
-
+void				ft_free(void *ptr);
+void				free(void *ptr);
 void				*ft_malloc(size_t size);
 void 				*malloc(size_t size);
+void 				*ft_realloc(void *ptr, size_t size);
 void 				*realloc(void *ptr, size_t size);
+void				show_alloc_mem();
 
 #endif

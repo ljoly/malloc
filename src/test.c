@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 18:09:38 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/04 21:48:00 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/08 19:12:50 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,97 @@
 
 int main(void)
 {
+    char *s0;
     char *s1;
     char *s2;
     char *s3;
+    char *s4;
+    char *sm1;
+    char *sm2;
+    char *L1;
+    char *L2;
+
+    // TINY
+
+    s0 = (char *)ft_malloc(sizeof(char) * 0);
+    s0[0] = 's';
+    s0[1] = '0';
+    ft_printf("%s\n", s0);
+    ft_printf("address s0 = %p\n", s0);    
 
     s1 = (char *)ft_malloc(sizeof(char) * 7);
-    s1[0] = 'h';
-    s1[1] = 'e';
-    s1[2] = 'l';
-    s1[3] = 'l';
-    s1[4] = 'o';
-    s1[5] = '!';
-    s1[6] = '\0';
+    s1[0] = 's';
+    s1[1] = '1';
     ft_printf("%s\n", s1);
     ft_printf("address s1 = %p\n", s1);    
-
-    // ft_printf("\nON PRINT S1: \"%s\", ON PASSE A S2:\n\n", s1);
-
+        
     s2 = (char *)ft_malloc(sizeof(char) * 5);
-    s2[0] = '1';
+    s2[0] = 's';
     s2[1] = '2';
-    s2[2] = '3';
-    s2[3] = '4';
-    s2[4] = '\0';
     ft_printf("%s\n", s2);
-    ft_printf("address s2 = %p\n", s2);
+    ft_printf("address s2 = %p\n", s2);        
     
-    s3 = (char *)ft_malloc(sizeof(char) * 6);
+    s3 = (char *)ft_malloc(sizeof(char) * 40);
     s3[0] = 's';
-    s3[1] = 'a';
-    s3[2] = 'l';
-    s3[3] = 'u';
-    s3[4] = 't';
-    s3[5] = '\0';
-    ft_printf("%s\n", s3);
+    s3[1] = '3';
+    ft_printf("%s\n", s3);    
     ft_printf("address s3 = %p\n", s3);
     
+    
+    s4 = (char *)ft_malloc(sizeof(char) * 3);
+    s4[0] = 's';
+    s4[1] = '4';
+    ft_printf("%s\n", s4);
+    ft_printf("address s4 = %p\n", s4);            
+
+    // SMALL
+
+    sm1 = (char *)ft_malloc(sizeof(char) * 993);
+    sm1[0] = 'S';
+    sm1[1] = 'M';
+    sm1[2] = '1';
+    sm1[3] = '\0';
+
+    sm2 = (char *)ft_malloc(sizeof(char) * 126991);
+    sm2[0] = 'S';
+    sm2[1] = 'M';
+    sm2[2] = '2';
+    sm2[3] = '\0';
+
+    // LARGE
+
+    L1 = (char*)ft_malloc(sizeof(char) * 1000000);
+    L1[0] = 'L';
+    L1[1] = '1';
+    L1[2] = '\0';
+
+    L2 = (char*)ft_malloc(sizeof(char) * 16000000);
+    L2[0] = 'L';
+    L2[1] = '2';
+    L2[2] = '\0';
+
+    ft_printf("\naddress s0 = %p\n", s0);
+    ft_printf("address s1 = %p\n", s1);
+    ft_printf("address s2 = %p\n", s2);    
+    ft_printf("address s3 = %p\n", s3);
+    ft_printf("address s4 = %p\n", s4);
+    ft_printf("address sm1 = %p\n", sm1);
+    ft_printf("address sm2 = %p\n", sm2);
+    ft_printf("address L1 = %p\n", L1);           
+    ft_printf("address L2 = %p\n", L2);
+
+    // int     i;
+
+    // i = 0;
+    // while ()
     ft_printf("\nmeta[2] = %s\n", meta[2].ptr);
     ft_printf("meta[3] = %s\n", meta[3].ptr);
-    ft_printf("meta[4] = %s\n", meta[4].ptr);  
+    ft_printf("meta[4] = %s\n", meta[4].ptr);
+    ft_printf("meta[5] = %s\n", meta[5].ptr);
+    ft_printf("meta[6] = %s\n", meta[6].ptr);      
+    ft_printf("meta[8] = %s\n", meta[8].ptr);
+    ft_printf("meta[9] = %s\n", meta[9].ptr);                        
+    ft_printf("meta[10] = %s\n", meta[10].ptr);                            
+    ft_printf("meta[11] = %s\n", meta[11].ptr);                            
     return (0);
 }

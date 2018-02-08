@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   malloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/04 21:58:26 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/08 18:27:57 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,17 @@ static size_t   quantum_size_to_map(size_t size)
     size_t      size_to_map;
     size_t      quantum;
 
+    ft_printf("SIZE ASKED: %zu\n", size);
+    if (size == 0)
+        size = 1;
     if (size <= TINY_MAX)
         quantum = TINY_QUANTUM;
     else if (size <= SMALL_MAX)
         quantum = SMALL_QUANTUM;
     else
         return size;
-    size_to_map = (size / quantum + (size % quantum) ? 1 : 0) * quantum;
+    ft_printf("QUANTUM SIZE: %zu\n", quantum);
+    size_to_map = (size / quantum + ((size % quantum) ? 1 : 0)) * quantum;
     return size_to_map;
 }
 
@@ -39,7 +43,7 @@ static void      map_zone(t_req *r, t_type type, t_bool new_block)
 {
     int         i;
 
-    i = meta[0].type - meta[0].size_left;
+    i = meta[0].type - meta[0].size;
     if (type >= TINY_REGION)
     {
         ft_printf("TYPE = %d, INDEX = %d\n", type, i);
@@ -51,14 +55,16 @@ static void      map_zone(t_req *r, t_type type, t_bool new_block)
     {
         meta[i].type = type;        
         meta[i].ptr = r->zone;
+        meta[i].size = r->size_asked;
     }
     else
     {
         meta[r->index].type = type;
         meta[r->index].ptr = r->zone;
+        meta[r->index].size = r->size_asked;
     }
-    meta[0].size_left--;
-    ft_printf("SIZE LEFT = %zu\n", meta[0].size_left);
+    meta[0].size--;
+    ft_printf("SIZE LEFT = %zu\n", meta[0].size);
     ft_putendl("REGION MAPPED");
 }
 
@@ -72,17 +78,16 @@ static size_t   get_available_zone(t_req *r, t_type type)
 	size_t      i;
 
     i = 1;
+    ft_printf("TYPE ASKED = %d\n", type);    
     if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_REGION)
     {   
-        ft_printf("TYPE ASKED = %d\n", type);
-        while (i < meta[0].type - meta[0].size_left)
+        while (i < meta[0].type - meta[0].size)
         {
             ft_printf("TYPE IN META = %d\n", meta[i].type);
-            if (meta[i].type == type && meta[i].size_left >= r->size_to_map)
+            if (meta[i].type == type && meta[i].size >= r->size_to_map)
             {
-                ft_putendl("AARRRFF");
-                r->zone = meta[i].ptr + (r->region_size - meta[i].size_left);
-                meta[i].size_left -= r->size_to_map;
+                r->zone = meta[i].ptr + (r->region_size - meta[i].size);
+                meta[i].size -= r->size_to_map;
                 return i;
             }
             i++;
@@ -90,8 +95,9 @@ static size_t   get_available_zone(t_req *r, t_type type)
     }
     else
     {
-        while (i < meta[0].type - meta[0].size_left)
+        while (i < meta[0].type - meta[0].size)
         {
+            ft_printf("TYPE IN META = %d\n", meta[i].type);            
             if (meta[i].type == type && meta[i].ptr == r->zone)
                 return (r->index = i);
             i++;
@@ -100,65 +106,63 @@ static size_t   get_available_zone(t_req *r, t_type type)
     return 0;
 }
 
-static char *map_data(size_t size)
+static void    init_request(t_req  *r, size_t size)
 {
-    int     i;
+    r->size_asked = size;
+    r->size_to_map = quantum_size_to_map(size);
+    ft_printf("SIZE TO MAP: %zu\n", r->size_to_map);    
+    r->region = LARGE_REGION;
+    r->block = LARGE_FREED;
+    r->region_size = r->size_asked;
+    r->index = 0;
+    if (r->size_asked <= TINY_MAX)
+    {
+        r->region = TINY_REGION;
+        r->region_size = T_REGION_SIZE;
+        r->block = TINY_FREED;
+    }
+    else if (r->size_asked <= SMALL_MAX)
+    {
+        r->region = SMALL_REGION;
+        r->region_size = S_REGION_SIZE;
+        r->block = SMALL_FREED;
+    }
+}    
+
+static      char *map_data(size_t size)
+{
     char    *ptr;
     t_req   r;
+    int     i;    
 
     ptr = NULL;
-    r.size_to_map = quantum_size_to_map(size);
-    // r.region = LARGE_REGION;                // DEAL WITH LARGE LATER
-    // r.block = LARGE_FREED;
-    r.region_size = size;
-    r.index = 0;    
-    if (size <= TINY_MAX)
-    {
-        r.region = TINY_REGION;
-        r.region_size = T_REGION_SIZE;
-        r.block = TINY_FREED;
-    }
-    else if (size <= SMALL_MAX)
-    {
-        r.region = SMALL_REGION;
-        r.region_size = S_REGION_SIZE;
-        r.block = SMALL_FREED;
-    }
+    init_request(&r, size);
     if ((get_available_zone(&r, r.region)))
     {
-        ft_putendl("AVAILABLE REGION FOUND !");
         if ((get_available_zone(&r, r.block)))
         {
-            ft_putendl("AVAILABLE BLOCK FOUND !");
             map_zone(&r, r.block, FALSE);
         }
         else
             map_zone(&r, r.block, TRUE);
-        return r.zone;
+        return (r.zone);
     }
     else
     {
-        i = meta[0].type - meta[0].size_left;
+        i = meta[0].type - meta[0].size;
         map_zone(&r, r.region, FALSE);
         ptr = meta[i].ptr;
-        meta[i].size_left = r.region_size - r.size_to_map;
+        meta[i].size = r.region_size - r.size_to_map;
         map_zone(&r, r.block, TRUE);
         
     }
-    // else if (size <= SMALL_MAX_SIZE)
-    // {
-    // }
-    // else
-    // {
-        // LARGE
-    // }
-    return ptr;
+    return (ptr);
 }
 
-static void allocate_meta(void)
+static void     allocate_meta(void)
 {
     // t_meta *cpy;
-    int     size;
+    int         size;
 
     size = getpagesize() / sizeof(t_meta);
     // if (meta)
@@ -187,34 +191,22 @@ static void allocate_meta(void)
         ft_bzero(meta, sizeof(meta));
         meta[0].type = size;
         meta[0].ptr = (char*)meta;
-        meta[0].size_left = size - 1;
+        meta[0].size = size - 1;
         ft_putendl("ALLOCATION META DONE");
     // }
 }
 
-static void     print(void)
+void            *ft_malloc(size_t size)
 {
-    unsigned long         i;
-
-    i = 0;
-    while (i < meta[0].type - meta[0].size_left)
-    {
-        printf("\nmeta[%lu]:\ntype: %d\nptr: %p\nsize_left: %zu\n\n", i, meta[i].type, meta[i].ptr, meta[i].size_left);
-        i++;
-    }
-}
-
-void *ft_malloc(size_t size)
-{
-    void *ptr;
+    void        *ptr;
 
     ptr = NULL;
     ft_putendl("------------------------------MALLOC_CALLING");
-    if (size > SIZE_T_MAX - (2 * getpagesize()))
-        return (NULL);
-    if (!meta || (meta && !meta[0].size_left))
+    // if (size > SIZE_T_MAX - (2 * getpagesize()))
+        // return (NULL);
+    if (!meta || (meta && !meta[0].size))
         allocate_meta();
     ptr = (void*)map_data(size);
-    print();
+    show_alloc_mem();
     return (ptr);
 }

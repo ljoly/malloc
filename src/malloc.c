@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/08 18:27:57 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/09 19:48:59 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ static size_t   get_available_zone(t_req *r, t_type type)
 
     i = 1;
     ft_printf("TYPE ASKED = %d\n", type);    
-    if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_REGION)
+    if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_FREED)
     {   
         while (i < meta[0].type - meta[0].size)
         {
-            ft_printf("TYPE IN META = %d\n", meta[i].type);
+            ft_printf("(REGION) TYPE IN META = %d\n", meta[i].type);
             if (meta[i].type == type && meta[i].size >= r->size_to_map)
             {
                 r->zone = meta[i].ptr + (r->region_size - meta[i].size);
@@ -97,7 +97,7 @@ static size_t   get_available_zone(t_req *r, t_type type)
     {
         while (i < meta[0].type - meta[0].size)
         {
-            ft_printf("TYPE IN META = %d\n", meta[i].type);            
+            ft_printf("(BLOCK) TYPE IN META = %d\n", meta[i].type);            
             if (meta[i].type == type && meta[i].ptr == r->zone)
                 return (r->index = i);
             i++;
@@ -111,7 +111,7 @@ static void    init_request(t_req  *r, size_t size)
     r->size_asked = size;
     r->size_to_map = quantum_size_to_map(size);
     ft_printf("SIZE TO MAP: %zu\n", r->size_to_map);    
-    r->region = LARGE_REGION;
+    r->region = LARGE_FREED;
     r->block = LARGE_FREED;
     r->region_size = r->size_asked;
     r->index = 0;
@@ -129,11 +129,11 @@ static void    init_request(t_req  *r, size_t size)
     }
 }    
 
-static      char *map_data(size_t size)
+static      char *map_data(size_t size) // PB AVEC LES LARGE
 {
     char    *ptr;
     t_req   r;
-    int     i;    
+    int     i;
 
     ptr = NULL;
     init_request(&r, size);
@@ -144,7 +144,10 @@ static      char *map_data(size_t size)
             map_zone(&r, r.block, FALSE);
         }
         else
+        {
+            r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK; 
             map_zone(&r, r.block, TRUE);
+        }
         return (r.zone);
     }
     else
@@ -153,6 +156,7 @@ static      char *map_data(size_t size)
         map_zone(&r, r.region, FALSE);
         ptr = meta[i].ptr;
         meta[i].size = r.region_size - r.size_to_map;
+        r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;
         map_zone(&r, r.block, TRUE);
         
     }
@@ -161,39 +165,39 @@ static      char *map_data(size_t size)
 
 static void     allocate_meta(void)
 {
-    // t_meta *cpy;
+    t_meta      *cpy;
     int         size;
 
     size = getpagesize() / sizeof(t_meta);
-    // if (meta)
-    // {
-    //     ft_putendl("AUTRE ALLOCATION\n");
-    //     cpy = (t_meta *)mmap(0, sizeof(meta) + getpagesize() * sizeof(t_meta),
-    //         MMAP_FLAGS, -1, 0);
-    //     cpy = (t_meta *)ft_memcpy(cpy, meta, getpagesize());
-    //     if (munmap(meta, sizeof(meta)))
-    //     {
-    //         ft_putendl("ERROR");
-    //     }
-    //     else
-    //     {
-    //         meta = cpy;
-            // meta[0].type += getpagesize() / sizeof(t_meta);
-    //         meta[0].ptr = (char*)meta + getpagesize();
-    //         meta[0].size_left = getpagesize();
-    //         ft_putendl("NEW ALLOCATION SUCCESS");
-    //     }
-    // }
-    // else
-    // {
+    if (meta)
+    {
+        ft_putendl("AN OTHER META ALLOCATION\n");
+        cpy = (t_meta *)mmap(0, meta[0].type + size,
+            MMAP_FLAGS, -1, 0);
+        cpy = (t_meta *)ft_memcpy(cpy, meta, sizeof(meta));
+        if (munmap(meta, sizeof(meta)))
+        {
+            ft_putendl("ERROR");
+        }
+        else
+        {
+            meta = cpy;
+            meta[0].type += size;
+            // meta[0].ptr = (char*)meta + getpagesize();
+            meta[0].size = size;
+            ft_putendl("NEW ALLOCATION SUCCESS");
+        }
+    }
+    else
+    {
         ft_putendl("ALLOCATION META");
         meta = (t_meta *)mmap(0, size, MMAP_FLAGS, -1, 0);
         ft_bzero(meta, sizeof(meta));
         meta[0].type = size;
-        meta[0].ptr = (char*)meta;
+        // meta[0].ptr = (char*)meta;
         meta[0].size = size - 1;
         ft_putendl("ALLOCATION META DONE");
-    // }
+    }
 }
 
 void            *ft_malloc(size_t size)

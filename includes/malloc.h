@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/08 18:23:44 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/11 20:33:06 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ typedef enum        e_type
 /*2*/	SMALL_BLOCK,
 /*3*/	TINY_FREED,
 /*4*/	SMALL_FREED,
-/*5*/	LARGE_FREED,
-/*6*/	TINY_REGION,
-/*7*/	SMALL_REGION,
-/*8*/	LARGE_REGION
+/*5*/	TINY_REGION,
+/*6*/	SMALL_REGION,
+/*7*/	LARGE_REGION,
+/*8*/	LARGE_FREED,
 }                   t_type;
 
 typedef struct      s_meta
@@ -62,7 +62,6 @@ typedef struct		s_req
 	t_type			region;
 	t_type			block;	
 	size_t			region_size;
-	size_t			size_asked;
 	size_t			size_to_map;
 	size_t			index;
 	char			*zone;
@@ -74,6 +73,9 @@ void				*ft_malloc(size_t size);
 void 				*malloc(size_t size);
 void 				*ft_realloc(void *ptr, size_t size);
 void 				*realloc(void *ptr, size_t size);
+
+void				map_zone(t_req *r, t_type type, t_bool new_block);
+void				update_region_size(char *ptr, size_t size);
 void				show_alloc_mem();
 
 #endif

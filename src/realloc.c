@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   realloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/09 19:22:18 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/11 20:48:28 by ljoly            ###   ########.fr       */
+/*   Created: 2018/02/11 19:48:45 by ljoly             #+#    #+#             */
+/*   Updated: 2018/02/11 21:00:13 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void        ft_free(void *ptr)
+void           *ft_realloc(void *ptr, size_t size)
 {
-    size_t  i;
+    size_t     i;
+    void       *p;
 
+    p = ptr;
     if (ptr)
     {
         if (meta)
@@ -27,20 +29,19 @@ void        ft_free(void *ptr)
                      meta[i].type == LARGE_REGION) &&
                     meta[i].ptr == (char *)ptr)
                 {
-                    if (meta[i].type == TINY_BLOCK)
-                        meta[i].type = TINY_FREED;
-                    else if (meta[i].type == SMALL_BLOCK)
-                        meta[i].type = SMALL_FREED;
-                    else if (meta[i].type == LARGE_REGION)
-                        meta[i].type = LARGE_FREED;
-                    if (meta[i].type != LARGE_FREED)
-                        update_region_size((char *)ptr, meta[i].size);
-                    return;
+                    if (meta[i].size < size)
+                    {
+                        p = ft_malloc(size);
+                        p = ft_memcpy(p, meta[i].ptr, sizeof(meta[i].ptr));
+                        ft_free(ptr);                        
+                    }
+                    return (p);
                 }
                 i++;
             }
         }
-        ft_printf("Pointer %p was not allocated and can not be freed.\n", ptr);
+        ft_printf("Pointer %p was not allocated.\n", ptr);
         exit(-1);
     }
+    return (ft_malloc(size));
 }

@@ -6,13 +6,13 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2018/02/12 23:47:40 by ljoly            ###   ########.fr        #
+#    Updated: 2018/02/14 21:05:03 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = malloc
 
-SRC = test3.c malloc.c map_zone.c free.c update_region_size.c realloc.c \
+SRC = test1.c malloc.c map_zone.c free.c update_region_size.c realloc.c \
 	show_alloc_memory.c
 
 SRC_PATH = ./src/

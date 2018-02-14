@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/13 00:12:31 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/14 23:32:34 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static size_t   get_available_zone(t_req *r, t_type type)
 
     i = 1;
     if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_FREED)
-    {   
+    {
         while (i < meta[0].type - meta[0].size)
         {
             if (meta[i].type == type && meta[i].size >= r->size_to_map)
@@ -97,7 +97,7 @@ static void     allocate_meta(void)
     if (meta)
     {
         ft_putendl("AN OTHER META ALLOCATION\n");
-        cpy = (t_meta *)mmap(0, meta[0].type + size,
+        cpy = (t_meta *)mmap(0, meta[0].type * sizeof(t_meta) + size,
             MMAP_FLAGS, -1, 0);
         cpy = (t_meta *)ft_memcpy(cpy, meta, meta[0].type * sizeof(t_meta));
         ft_printf("SIZE OF META = %zu\n", meta[0].type * sizeof(t_meta));
@@ -116,9 +116,9 @@ static void     allocate_meta(void)
     else
     {
         ft_putendl("ALLOCATION META");
-        meta = (t_meta *)mmap(0, size, MMAP_FLAGS, -1, 0);
-        meta[0].type = size;
-        ft_bzero(meta, size * sizeof(t_meta));        
+        meta = (t_meta *)mmap(0, size * sizeof(t_meta), MMAP_FLAGS, -1, 0);
+        ft_bzero(meta, size * sizeof(t_meta));  
+        meta[0].type = size;              
         meta[0].size = size - 1;
         ft_putendl("ALLOCATION META DONE");
     }

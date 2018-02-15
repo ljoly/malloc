@@ -12,5 +12,11 @@ int     main(void)
         addr[0] = 42;
         i++;
     }
+    // ft_putnbr(mmap_count);
+    // ft_putchar('\n');
+    // ft_putnbr(new_alloc);
+    // ft_putchar('\n');
+    // ft_putnbr(pages);
+    // ft_putchar('\n');
     return (0);
 }

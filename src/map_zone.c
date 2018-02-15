@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:32:13 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/11 20:33:32 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/15 17:27:39 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void            map_zone(t_req *r, t_type type, t_bool new_block)
     {
         meta[i].type = type;        
         meta[i].ptr = mmap(0, r->region_size, MMAP_FLAGS, -1, 0);
+        // mmap_count++;
+        // ft_printf("pages = %zu\n", pages);
+        // ft_printf("r->region_size = %zu\n", r->region_size);
+        // pages += (r->region_size / getpagesize() + ((r->region_size % getpagesize()) ? 1 : 0));
+        // ft_printf("pages = %zu\n", pages);
         meta[i].size = r->size_to_map;
         r->zone = meta[i].ptr;
     }

@@ -6,11 +6,13 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 19:22:18 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/11 20:48:28 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/15 18:35:52 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
+
+// MUNMAP EMPTY REGIONS
 
 void        ft_free(void *ptr)
 {
@@ -40,7 +42,7 @@ void        ft_free(void *ptr)
                 i++;
             }
         }
-        ft_printf("Pointer %p was not allocated and can not be freed.\n", ptr);
-        exit(-1);
+        // ft_printf("Pointer %p was not allocated and can not be freed.\n", ptr);
+        // exit(-1);
     }
 }

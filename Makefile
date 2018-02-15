@@ -6,13 +6,20 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2018/02/14 21:05:03 by ljoly            ###   ########.fr        #
+#    Updated: 2018/02/15 18:28:50 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = malloc
+# ifeq ($(HOSTTYPE),)
+# 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+# endif
 
-SRC = test1.c malloc.c map_zone.c free.c update_region_size.c realloc.c \
+NAME = malloc
+# NAME = libft_malloc_$(HOSTTYPE).so
+# LINK_NAME = libft_malloc.so
+
+
+SRC = test1.c malloc.c map_zone.c allocate_meta.c free.c update_region_size.c realloc.c \
 	show_alloc_memory.c
 
 SRC_PATH = ./src/
@@ -35,6 +42,8 @@ all: $(NAME)
 
 $(NAME): obj $(OBJ)
 	gcc $(FLAGS) -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
+	# gcc $(FLAGS) -shared -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
+	
 	@printf "\n$(GREEN)[✓]$(NC)\x1B[32mExecutable $(NAME) ready !\x1B[37m\n"
 
 obj:
@@ -54,6 +63,7 @@ clean:
 fclean: clean
 	# @make -C $(LIBFT) fclean
 	@rm -f $(NAME)
+	@rm -f $(LINK_NAME)
 	@printf "$(RED)[-]$(NC)Executable $(NAME) deleted\n"
 
 re: fclean all

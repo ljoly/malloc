@@ -6,20 +6,20 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2018/02/15 18:28:50 by ljoly            ###   ########.fr        #
+#    Updated: 2018/02/18 21:40:27 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# ifeq ($(HOSTTYPE),)
-# 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
-# endif
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
 
-NAME = malloc
-# NAME = libft_malloc_$(HOSTTYPE).so
-# LINK_NAME = libft_malloc.so
+# NAME = malloc
+NAME = libft_malloc_$(HOSTTYPE).so
+LINK_NAME = libft_malloc.so
 
 
-SRC = test1.c malloc.c map_zone.c allocate_meta.c free.c update_region_size.c realloc.c \
+SRC = malloc.c map_zone.c allocate_meta.c free.c update_region_size.c realloc.c \
 	show_alloc_memory.c
 
 SRC_PATH = ./src/
@@ -41,10 +41,10 @@ NC=\033[0m
 all: $(NAME)
 
 $(NAME): obj $(OBJ)
-	gcc $(FLAGS) -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
-	# gcc $(FLAGS) -shared -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
-	
-	@printf "\n$(GREEN)[✓]$(NC)\x1B[32mExecutable $(NAME) ready !\x1B[37m\n"
+	# gcc $(FLAGS) -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
+	gcc $(FLAGS) -shared -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
+	@ln -sf $(NAME) $(LINK_NAME)
+	@printf "\n$(GREEN)[✓]$(NC)\x1B[32mShared object $(NAME) ready !\x1B[37m\n"
 
 obj:
 	# @make -C $(LIBFT)
@@ -55,6 +55,13 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	gcc $(FLAGS) -I $(LIBFT) -I $(HEADER_LIB) -I $(HEADER) -o $@ -c $<
 	@printf "\e[38;5;208m▒\e[0m"
 
+test0:
+	@gcc $(FLAGS) tests/test0.c  -I $(HEADER_LIB) -I $(HEADER) -L $(LIBFT) -lft
+
+test1:
+	@gcc $(FLAGS) tests/test1.c  -I $(HEADER_LIB) -I $(HEADER) -L $(LIBFT) -lft
+	
+
 clean:
 	# @make -C $(LIBFT) clean
 	@rm -rf $(OBJ_PATH)
@@ -64,7 +71,8 @@ fclean: clean
 	# @make -C $(LIBFT) fclean
 	@rm -f $(NAME)
 	@rm -f $(LINK_NAME)
-	@printf "$(RED)[-]$(NC)Executable $(NAME) deleted\n"
+	@rm -f a.out
+	@printf "$(RED)[-]$(NC)Shared object $(NAME) deleted\n"
 
 re: fclean all
 

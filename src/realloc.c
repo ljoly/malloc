@@ -6,17 +6,18 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 19:48:45 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/11 21:00:13 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/18 22:10:40 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void           *ft_realloc(void *ptr, size_t size)
+void           *realloc(void *ptr, size_t size)
 {
     size_t     i;
     void       *p;
 
+    ft_putendl("realloc in");
     p = ptr;
     if (ptr)
     {
@@ -31,17 +32,18 @@ void           *ft_realloc(void *ptr, size_t size)
                 {
                     if (meta[i].size < size)
                     {
-                        p = ft_malloc(size);
+                        p = malloc(size);
                         p = ft_memcpy(p, meta[i].ptr, sizeof(meta[i].ptr));
-                        ft_free(ptr);                        
+                        free(ptr);                        
                     }
                     return (p);
                 }
                 i++;
             }
         }
-        ft_printf("Pointer %p was not allocated.\n", ptr);
-        exit(-1);
+        // ft_printf("Pointer %p was not allocated.\n", ptr);
+        // exit(-1);
     }
-    return (ft_malloc(size));
+    ft_putendl("realloc out");
+    return (malloc(size));
 }

@@ -6,7 +6,6 @@ int     main(void)
     char *addr;
 
     i = 0;
-    ft_putendl("SALUT");
     while (i < 1024)
     {
         addr = (char*)malloc(1024);

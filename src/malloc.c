@@ -6,13 +6,13 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/18 22:12:05 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/24 17:36:27 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_meta *meta = NULL;
+t_meta          *g_meta = NULL;
 // size_t  mmap_count = 0;
 // size_t  new_alloc = 0;
 // size_t  pages = 0;
@@ -47,12 +47,12 @@ static size_t   get_available_zone(t_req *r, t_type type)
     i = 1;
     if (type == TINY_REGION || type == SMALL_REGION || type == LARGE_FREED)
     {
-        while (i < meta[0].type - meta[0].size)
+        while (i < g_meta[0].type - g_meta[0].size)
         {
-            if (meta[i].type == type && meta[i].size >= r->size_to_map)
+            if (g_meta[i].type == type && g_meta[i].size >= r->size_to_map)
             {
-                r->zone = meta[i].ptr + (r->region_size - meta[i].size);
-                meta[i].size -= r->size_to_map;
+                r->zone = g_meta[i].ptr + (r->region_size - g_meta[i].size);
+                g_meta[i].size -= r->size_to_map;
                 return i;
             }
             i++;
@@ -60,9 +60,9 @@ static size_t   get_available_zone(t_req *r, t_type type)
     }
     else
     {
-        while (i < meta[0].type - meta[0].size)
+        while (i < g_meta[0].type - g_meta[0].size)
         {
-            if (meta[i].type == type && meta[i].ptr == r->zone)
+            if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
                 return (r->index = i);
             i++;
         }
@@ -114,15 +114,18 @@ static      char *map_data(size_t size)
     }
     else
     {
-        i = meta[0].type - meta[0].size;
+        i = g_meta[0].type - g_meta[0].size;
         map_zone(&r, r.region, FALSE);
-        ptr = meta[i].ptr;
+        ptr = g_meta[i].ptr;
         if (r.region != LARGE_REGION)
         {
-            meta[i].size = r.region_size - r.size_to_map;
+            g_meta[i].size = r.region_size - r.size_to_map;
             r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;
-            if (!meta[0].size)
+            if (!g_meta[0].size)
+            {
+                ft_putendl("ARF");
                 allocate_meta();
+            }
             map_zone(&r, r.block, TRUE);
         }
     }
@@ -136,8 +139,14 @@ void            *malloc(size_t size)
 
     ft_putendl("malloc");
     ptr = NULL;
-    if (!meta || (meta && !meta[0].size))
+    if (!g_meta || (g_meta && !g_meta[0].size))
+    {
+        if (!g_meta)
+            ft_putendl("!meta");
+        if (g_meta && !g_meta[0].size)
+            ft_putendl("!size");
         allocate_meta();
+    }
     ptr = (void*)map_data(size);
     ft_putendl("malloc return");
     return (ptr);

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/24 17:19:45 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/25 22:39:53 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include <sys/mman.h>
+# include <pthread.h>
 
 /*
 ** Considering this program will only be used on 64-bit architectures
@@ -53,6 +54,7 @@ typedef struct      s_meta
 }                   t_meta;
 
 t_meta   			*g_meta;
+pthread_mutex_t		g_mutex;
 // extern size_t		mmap_count;
 // extern size_t		new_alloc;
 // extern size_t		pages;

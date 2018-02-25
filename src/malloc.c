@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/24 17:36:27 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/25 23:42:42 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,20 @@ static size_t   get_available_zone(t_req *r, t_type type)
     {
         while (i < g_meta[0].type - g_meta[0].size)
         {
+                ft_putendl("////////////////////");
+                ft_putstr("meta[i].type = ");
+                ft_putnbr(g_meta[i].type);
+                ft_putchar('\n');
+                ft_putstr("type = ");
+                ft_putnbr(type);
+                ft_putchar('\n');
+                ft_putendl("////////////////////");
             if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
+            {
+
+                
                 return (r->index = i);
+            }
             i++;
         }
     }    
@@ -101,8 +113,12 @@ static      char *map_data(size_t size)
     init_request(&r, size);
     if ((get_available_zone(&r, r.region)))
     {
+        ft_putendl("REGION FOUND");
         if ((get_available_zone(&r, r.block)))
         {
+            ft_putnbr(r.index);
+            ft_putendl("BLOCK FOUND");
+            r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;             
             map_zone(&r, r.block, FALSE);
         }
         else
@@ -137,8 +153,11 @@ void            *malloc(size_t size)
 {
     void        *ptr;
 
+    ft_putnbr(size);
+    ft_putchar('\n');
     ft_putendl("malloc");
     ptr = NULL;
+    pthread_mutex_lock(&g_mutex);
     if (!g_meta || (g_meta && !g_meta[0].size))
     {
         if (!g_meta)
@@ -149,5 +168,7 @@ void            *malloc(size_t size)
     }
     ptr = (void*)map_data(size);
     ft_putendl("malloc return");
+    show_alloc_mem();        
+    pthread_mutex_lock(&g_mutex);
     return (ptr);
 }

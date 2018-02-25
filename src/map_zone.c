@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:32:13 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/24 17:42:48 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/25 22:57:20 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,13 @@ void            map_zone(t_req *r, t_type type, t_bool new_block)
     }
     else
     {
+        ft_putendl("MAP BLOCK");
+        ft_putnbr(r->index);
+        ft_putchar('\n');
         g_meta[r->index].type = type;
         g_meta[r->index].ptr = r->zone;
         g_meta[r->index].size = r->size_to_map;
+        return;
     }
     g_meta[0].size--;
 }

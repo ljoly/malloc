@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 19:22:18 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/24 17:39:34 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/02/25 22:53:26 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void        free(void *ptr)
 {
     size_t  i;
 
-    // ft_putendl("free in");
+    ft_putendl("free in");
     if (ptr)
     {
         if (g_meta)
@@ -43,7 +43,8 @@ void        free(void *ptr)
                         // ft_putendl("free update");
                         update_region_size((char *)ptr, g_meta[i].size);
                     }
-                    // ft_putendl("free return");
+                    // show_alloc_mem();
+                    ft_putendl("free out");
                     return;
                 }
                 i++;
@@ -52,5 +53,5 @@ void        free(void *ptr)
         // ft_printf("Pointer %p was not allocated and can not be freed.\n", ptr);
         // exit(-1);
     }
-    // ft_putendl("free out");
+    ft_putendl("free out");
 }

@@ -6,10 +6,13 @@ int     main(void)
     char *addr;
 
     i = 0;
-    while (i < 1024)
+    while (i < 2)
     {
+        ft_putendl("AVANT");
         addr = (char*)malloc(1024);
+        ft_putendl("APRES");
         addr[0] = 42;
+        free(addr);
         i++;
     }
     // ft_putnbr(mmap_count);

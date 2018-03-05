@@ -6,7 +6,7 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2018/03/05 19:10:18 by ljoly            ###   ########.fr        #
+#    Updated: 2018/03/05 19:31:46 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,6 @@ NC=\033[0m
 all: $(NAME)
 
 $(NAME): obj $(OBJ)
-	gcc $(FLAGS) -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
 	gcc $(FLAGS) -shared -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
 	@ln -sf $(NAME) $(LINK_NAME)
 	@printf "\n$(GREEN)[✓]$(NC)\x1B[32mShared object $(NAME) ready !\x1B[37m\n"

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/05 19:22:37 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/05 20:22:22 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,8 @@ static size_t   get_available_zone(t_req *r, t_type type)
     {
         while (i < g_meta[0].type - g_meta[0].size)
         {
-            if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
-            {
-
-                
+            if (g_meta[i].type == type && g_meta[i].ptr == r->zone)                
                 return (r->index = i);
-            }
             i++;
         }
     }    

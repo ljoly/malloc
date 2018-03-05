@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/25 23:42:42 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/05 19:17:53 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ static size_t   get_available_zone(t_req *r, t_type type)
     {
         while (i < g_meta[0].type - g_meta[0].size)
         {
-                ft_putendl("////////////////////");
-                ft_putstr("meta[i].type = ");
-                ft_putnbr(g_meta[i].type);
-                ft_putchar('\n');
-                ft_putstr("type = ");
-                ft_putnbr(type);
-                ft_putchar('\n');
-                ft_putendl("////////////////////");
+                // ft_putendl("////////////////////");
+                // ft_putstr("meta[i].type = ");
+                // ft_putnbr(g_meta[i].type);
+                // ft_putchar('\n');
+                // ft_putstr("type = ");
+                // ft_putnbr(type);
+                // ft_putchar('\n');
+                // ft_putendl("////////////////////");
             if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
             {
 
@@ -111,13 +111,14 @@ static      char *map_data(size_t size)
 
     ptr = NULL;
     init_request(&r, size);
+    // ft_putendl("INIT REQUEST DONE");
     if ((get_available_zone(&r, r.region)))
     {
-        ft_putendl("REGION FOUND");
+        // ft_putendl("REGION FOUND");
         if ((get_available_zone(&r, r.block)))
         {
-            ft_putnbr(r.index);
-            ft_putendl("BLOCK FOUND");
+            // ft_putnbr(r.index);
+            // ft_putendl("BLOCK FOUND");
             r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;             
             map_zone(&r, r.block, FALSE);
         }
@@ -126,6 +127,7 @@ static      char *map_data(size_t size)
             r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK; 
             map_zone(&r, r.block, TRUE);
         }
+        // ft_putendl("DATA MAPPED");
         return (r.zone);
     }
     else
@@ -139,12 +141,13 @@ static      char *map_data(size_t size)
             r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;
             if (!g_meta[0].size)
             {
-                ft_putendl("ARF");
+                // ft_putendl("ARF");
                 allocate_meta();
             }
             map_zone(&r, r.block, TRUE);
         }
     }
+        // ft_putendl("DATA MAPPED");    
     return (ptr);
 }
 
@@ -153,22 +156,22 @@ void            *malloc(size_t size)
 {
     void        *ptr;
 
-    ft_putnbr(size);
-    ft_putchar('\n');
-    ft_putendl("malloc");
+    // ft_putnbr(size);
+    // ft_putchar('\n');
+    // ft_putendl("malloc");
     ptr = NULL;
     pthread_mutex_lock(&g_mutex);
     if (!g_meta || (g_meta && !g_meta[0].size))
     {
-        if (!g_meta)
-            ft_putendl("!meta");
-        if (g_meta && !g_meta[0].size)
-            ft_putendl("!size");
+        // if (!g_meta)
+            // ft_putendl("!meta");
+        // if (g_meta && !g_meta[0].size)
+            // ft_putendl("!size");
         allocate_meta();
     }
     ptr = (void*)map_data(size);
-    ft_putendl("malloc return");
-    show_alloc_mem();        
+    // ft_putendl("malloc return");
+    // show_alloc_mem();        
     pthread_mutex_lock(&g_mutex);
     return (ptr);
 }

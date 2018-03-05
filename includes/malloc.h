@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/25 22:39:53 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/05 18:29:09 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,8 @@ typedef struct      s_meta
 	size_t			size;
 }                   t_meta;
 
-t_meta   			*g_meta;
+extern t_meta   	*g_meta;
 pthread_mutex_t		g_mutex;
-// extern size_t		mmap_count;
-// extern size_t		new_alloc;
-// extern size_t		pages;
 
 /*
 ** Specs of the requested zone
@@ -72,16 +69,12 @@ typedef struct		s_req
 	char			*zone;
 }					t_req;
 
-// void				ft_free(void *ptr);
 void				free(void *ptr);
-// void				*ft_malloc(size_t size);
 void 				*malloc(size_t size);
-// void 				*ft_realloc(void *ptr, size_t size);
 void 				*realloc(void *ptr, size_t size);
 
 void            	allocate_meta(void);
 void				map_zone(t_req *r, t_type type, t_bool new_block);
-void				update_region_size(char *ptr, size_t size);
 void				show_alloc_mem();
 
 #endif

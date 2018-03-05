@@ -6,7 +6,7 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2018/02/24 19:10:52 by ljoly            ###   ########.fr        #
+#    Updated: 2018/03/05 19:10:18 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,11 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-# NAME = malloc
 NAME = libft_malloc_$(HOSTTYPE).so
 LINK_NAME = libft_malloc.so
 
 
-SRC = malloc.c map_zone.c allocate_meta.c free.c update_region_size.c realloc.c \
+SRC = malloc.c map_zone.c allocate_meta.c free.c realloc.c \
 	show_alloc_memory.c
 
 SRC_PATH = ./src/
@@ -41,34 +40,27 @@ NC=\033[0m
 all: $(NAME)
 
 $(NAME): obj $(OBJ)
-	# gcc $(FLAGS) -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
+	gcc $(FLAGS) -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
 	gcc $(FLAGS) -shared -o $(NAME) -I $(HEADER_LIB) -I $(HEADER) $(OBJ) -L $(LIBFT) -lft
 	@ln -sf $(NAME) $(LINK_NAME)
 	@printf "\n$(GREEN)[✓]$(NC)\x1B[32mShared object $(NAME) ready !\x1B[37m\n"
 
 obj:
-	# @make -C $(LIBFT)
-	# @printf "\n\x1B[38;5;208mCompiling $(NAME)...\n\x1b[37m"
+	@make -C $(LIBFT)
+	@printf "\n\x1B[38;5;208mCompiling $(NAME)...\n\x1b[37m"
 	@mkdir -p $(OBJ_PATH)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	gcc $(FLAGS) -I $(LIBFT) -I $(HEADER_LIB) -I $(HEADER) -o $@ -c $<
 	@printf "\e[38;5;208m▒\e[0m"
 
-test0:
-	@gcc $(FLAGS) tests/test0.c  -I $(HEADER_LIB) -I $(HEADER) -L $(LIBFT) -lft
-
-test1:
-	@gcc $(FLAGS) tests/test1.c  -I $(HEADER_LIB) -I $(HEADER) -L $(LIBFT) -lft
-	
-
 clean:
-	# @make -C $(LIBFT) clean
+	@make -C $(LIBFT) clean
 	@rm -rf $(OBJ_PATH)
 	@printf "$(RED)[-]$(NC)Obj files deleted\n"
 
 fclean: clean
-	# @make -C $(LIBFT) fclean
+	@make -C $(LIBFT) fclean
 	@rm -f $(NAME)
 	@rm -f $(LINK_NAME)
 	@rm -f a.out

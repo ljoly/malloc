@@ -1,4 +1,4 @@
-#include "malloc.h"
+#include <stdlib.h>
 
 int     main(void)
 {
@@ -6,15 +6,15 @@ int     main(void)
     char *addr;
 
     i = 0;
-    while (i < 2)
+    // ft_putendl("TEST1");
+    while (i < 1024)
     {
-        ft_putendl("AVANT");
         addr = (char*)malloc(1024);
-        ft_putendl("APRES");
         addr[0] = 42;
-        free(addr);
+        // free(addr);
         i++;
     }
+    // show_alloc_mem();        
     // ft_putnbr(mmap_count);
     // ft_putchar('\n');
     // ft_putnbr(new_alloc);

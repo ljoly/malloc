@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 19:48:45 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/24 17:38:18 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/05 18:40:02 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void           *realloc(void *ptr, size_t size)
                 }
                 i++;
             }
+            return (NULL);
         }
         // ft_printf("Pointer %p was not allocated.\n", ptr);
         // exit(-1);

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/06 14:10:00 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/06 15:10:14 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ void show_alloc_mem(void)
             i++;
         }
     }
-    pthread_mutex_lock(&g_mutex);
+    pthread_mutex_unlock(&g_mutex);
 }

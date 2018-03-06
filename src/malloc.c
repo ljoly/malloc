@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/06 14:32:42 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/06 16:28:28 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,13 @@ void			*malloc(size_t size)
 {
 	void		*ptr;
 
-	ptr = NULL;
 	pthread_mutex_lock(&g_mutex);
+	ptr = NULL;
 	if (!g_meta || (g_meta && !g_meta[0].size))
 	{
 		allocate_meta();
 	}
 	ptr = (void*)map_data(size);
-	pthread_mutex_lock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
 	return (ptr);
 }

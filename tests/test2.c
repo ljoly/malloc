@@ -8,7 +8,7 @@ int     main(void)
 
     i = 0;
     write(1, "TEST2\n", 6);
-    while (i < 5)
+    while (i < 1024)
     {
         addr = (char*)malloc(1024);
         addr[0] = 42;

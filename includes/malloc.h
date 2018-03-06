@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/06 11:41:13 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/06 14:35:32 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void				free(void *ptr);
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
 
+void				init_request(t_req *r, size_t size);
 void				allocate_meta(void);
 void				map_zone(t_req *r, t_type type, t_bool new_block);
 void				show_alloc_mem();

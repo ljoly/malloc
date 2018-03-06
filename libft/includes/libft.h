@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/24 16:14:13 by ljoly             #+#    #+#             */
-/*   Updated: 2018/02/18 21:04:42 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/06 14:36:02 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define WHITE "\033[0;37m"
 # define NC "\033[0m"
 
-typedef char            t_bool;
+typedef char			t_bool;
 
 # define TRUE           1
 # define FALSE          0

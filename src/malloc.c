@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/06 16:28:28 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/06 16:43:51 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,11 @@ void			*malloc(size_t size)
 	void		*ptr;
 
 	pthread_mutex_lock(&g_mutex);
+	if ((ssize_t)size < 0)
+	{
+		pthread_mutex_unlock(&g_mutex);
+		return (NULL);
+	}
 	ptr = NULL;
 	if (!g_meta || (g_meta && !g_meta[0].size))
 	{

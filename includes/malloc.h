@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/05 18:29:09 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/06 11:41:13 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,27 @@
 /*
 ** Blocks are subzones of Regions. Meta is an array of meta data.
 */
-typedef enum        e_type
+typedef enum		e_type
 {
-/*0*/	NO_TYPE,
-/*1*/	TINY_BLOCK,
-/*2*/	SMALL_BLOCK,
-/*3*/	TINY_FREED,
-/*4*/	SMALL_FREED,
-/*5*/	TINY_REGION,
-/*6*/	SMALL_REGION,
-/*7*/	LARGE_REGION,
-/*8*/	LARGE_FREED,
-}                   t_type;
+	NO_TYPE,
+	TINY_BLOCK,
+	SMALL_BLOCK,
+	TINY_FREED,
+	SMALL_FREED,
+	TINY_REGION,
+	SMALL_REGION,
+	LARGE_REGION,
+	LARGE_FREED,
+}					t_type;
 
-typedef struct      s_meta
+typedef struct		s_meta
 {
 	t_type			type;
 	char			*ptr;
 	size_t			size;
-}                   t_meta;
+}					t_meta;
 
-extern t_meta   	*g_meta;
+t_meta				*g_meta;
 pthread_mutex_t		g_mutex;
 
 /*
@@ -62,7 +62,7 @@ pthread_mutex_t		g_mutex;
 typedef struct		s_req
 {
 	t_type			region;
-	t_type			block;	
+	t_type			block;
 	size_t			region_size;
 	size_t			size_to_map;
 	size_t			index;
@@ -70,10 +70,10 @@ typedef struct		s_req
 }					t_req;
 
 void				free(void *ptr);
-void 				*malloc(size_t size);
-void 				*realloc(void *ptr, size_t size);
+void				*malloc(size_t size);
+void				*realloc(void *ptr, size_t size);
 
-void            	allocate_meta(void);
+void				allocate_meta(void);
 void				map_zone(t_req *r, t_type type, t_bool new_block);
 void				show_alloc_mem();
 

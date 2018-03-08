@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/07 23:46:45 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/08 16:22:43 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ void				get_region_size(size_t size, t_show_mem *mem);
 t_bool				is_block(t_type type);
 t_bool				is_in_region(t_show_mem mem, char *ptr);
 t_bool				is_large(t_type type);
+void				print_region(t_show_mem mem);
 
 #endif

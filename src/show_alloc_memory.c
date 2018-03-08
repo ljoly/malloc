@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/08 01:11:49 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/08 16:23:10 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,14 @@ static void			print_block(t_show_blocks to_print, t_show_blocks *last)
 	last->size = to_print.size;
 }
 
-static void			print_region(t_show_mem mem)
+static void			sort_blocks(t_show_blocks *to_print, t_show_blocks *last,
+	t_meta meta)
 {
-	if (mem.region == TINY_REGION)
-	{
-		ft_putstr("TINY: ");
-	}
-	else if (mem.region == SMALL_REGION)
-	{
-		ft_putstr("SMALL: ");
-	}
-	else if (mem.region == LARGE_REGION)
-	{
-		ft_putendl("LARGE: ");
-		return ;
-	}
-	ft_putstr("0x");
-	ft_print_hex((size_t)mem.region_ptr, 1);
-	ft_putchar('\n');
+	to_print->start = meta.ptr;
+	to_print->end = meta.ptr + meta.size_request;
+	to_print->size = meta.size_request;
+	print_block(*to_print, last);
+	to_print->start += meta.size;
 }
 
 static void			print_mem(t_show_mem mem)
@@ -53,7 +43,7 @@ static void			print_mem(t_show_mem mem)
 	size_t			i;
 
 	i = 1;
-	print_region(mem);	
+	print_region(mem);
 	last.start = NULL;
 	to_print.start = mem.region_ptr;
 	while (i < g_meta[0].type - g_meta[0].size)
@@ -64,47 +54,49 @@ static void			print_mem(t_show_mem mem)
 			if ((is_large(mem.region) && g_meta[i].ptr > last.start) ||
 				(g_meta[i].ptr > last.start && g_meta[i].ptr <= to_print.start))
 			{
-				to_print.start = g_meta[i].ptr;
-				to_print.end = g_meta[i].ptr + g_meta[i].size_request;
-				to_print.size = g_meta[i].size_request;
-				print_block(to_print, &last);
-				to_print.start += g_meta[i].size;
+				sort_blocks(&to_print, &last, g_meta[i]);
 				if (mem.region != LARGE_REGION)
 					i = 0;
 			}
 		}
 		i++;
 	}
-	
+}
+
+static void			sort_regions(t_show_mem *mem)
+{
+	size_t			i;
+
+	i = 1;
+	while (i < g_meta[0].type - g_meta[0].size)
+	{
+		if (g_meta[i].type == mem->region)
+		{
+			get_region_size(g_meta[i].size, mem);
+			mem->region_ptr = g_meta[i].ptr;
+			print_mem(*mem);
+			if (is_large(mem->region))
+				break ;
+		}
+		i++;
+	}
 }
 
 void				show_alloc_mem(void)
 {
-    size_t			i;
+	size_t			i;
 	t_show_mem		mem;
 
-    pthread_mutex_lock(&g_mutex);
-    if (g_meta)
-    {
-        i = 1;
+	pthread_mutex_lock(&g_mutex);
+	if (g_meta)
+	{
+		i = 1;
 		mem.region = TINY_REGION;
 		while (mem.region <= LARGE_REGION)
 		{
-			i = 1;
-        	while (i < g_meta[0].type - g_meta[0].size)
-        	{
-				if (g_meta[i].type == mem.region)
-				{
-					get_region_size(g_meta[i].size, &mem);
-					mem.region_ptr = g_meta[i].ptr;
-					print_mem(mem);
-					if (is_large(mem.region))
-						break;
-				}
-        		i++;
-        	}
+			sort_regions(&mem);
 			mem.region++;
 		}
-    }
-    pthread_mutex_unlock(&g_mutex);
+	}
+	pthread_mutex_unlock(&g_mutex);
 }

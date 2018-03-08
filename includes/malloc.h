@@ -6,14 +6,14 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/08 16:22:43 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/08 16:55:35 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
 
-# include "../libft/includes/libft.h"
+# include "libft.h"
 # include <sys/mman.h>
 # include <pthread.h>
 
@@ -66,7 +66,7 @@ typedef struct		s_req
 	t_type			block;
 	size_t			region_size;
 	size_t			size_to_map;
-	size_t			size_request;	
+	size_t			size_request;
 	size_t			index;
 	char			*zone;
 }					t_req;

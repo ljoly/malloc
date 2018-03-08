@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 19:48:45 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/06 16:28:05 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/08 16:53:25 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,13 @@ void			*realloc(void *ptr, size_t size)
 	{
 		if (g_meta)
 		{
-			p = find_ptr(ptr, size);
+			if (!size)
+			{
+				p = malloc(TINY_QUANTUM);
+				free(ptr);
+			}
+			else
+				p = find_ptr(ptr, size);
 		}
 	}
 	else

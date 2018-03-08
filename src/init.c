@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 12:07:06 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/06 12:43:24 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/07 21:02:03 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static size_t	quantum_size_to_map(size_t size)
 
 void			init_request(t_req *r, size_t size)
 {
+	r->size_request = size;
 	r->size_to_map = quantum_size_to_map(size);
 	r->region = LARGE_REGION;
 	r->block = LARGE_FREED;

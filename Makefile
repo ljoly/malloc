@@ -6,7 +6,7 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2018/03/08 16:42:17 by ljoly            ###   ########.fr        #
+#    Updated: 2018/03/09 03:49:22 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,8 +45,8 @@ $(NAME): obj $(OBJ)
 	@printf "\n$(GREEN)[✓]$(NC)\x1B[32mShared object $(NAME) ready !\x1B[37m\n"
 
 obj:
-	# @make -C $(LIBFT)
-	# @printf "\n\x1B[38;5;208mCompiling $(NAME)...\n\x1b[37m"
+	@make -C $(LIBFT)
+	@printf "\n\x1B[38;5;208mCompiling $(NAME)...\n\x1b[37m"
 	@mkdir -p $(OBJ_PATH)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
@@ -54,12 +54,12 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@printf "\e[38;5;208m▒\e[0m"
 
 clean:
-	# @make -C $(LIBFT) clean
+	@make -C $(LIBFT) clean
 	@rm -rf $(OBJ_PATH)
 	@printf "$(RED)[-]$(NC)Obj files deleted\n"
 
 fclean: clean
-	# @make -C $(LIBFT) fclean
+	@make -C $(LIBFT) fclean
 	@rm -f $(NAME)
 	@rm -f $(LINK_NAME)
 	@rm -f a.out

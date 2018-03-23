@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/08 16:23:10 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/23 15:11:09 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void				show_alloc_mem(void)
 	size_t			i;
 	t_show_mem		mem;
 
-	pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(mutex_sglton());
 	if (g_meta)
 	{
 		i = 1;
@@ -98,5 +98,5 @@ void				show_alloc_mem(void)
 			mem.region++;
 		}
 	}
-	pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(mutex_sglton());
 }

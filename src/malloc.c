@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/07 19:37:50 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/23 15:23:26 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,21 @@ static char		*map_data(size_t size)
 	return (ptr);
 }
 
+pthread_mutex_t        *mutex_sglton(void)
+{
+	static pthread_mutex_t    mutex = PTHREAD_MUTEX_INITIALIZER;
+
+	return (&mutex);
+}
+
 void			*malloc(size_t size)
 {
 	void		*ptr;
 
-	pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(mutex_sglton());
 	if ((ssize_t)size < 0)
 	{
-		pthread_mutex_unlock(&g_mutex);
+		pthread_mutex_unlock(mutex_sglton());
 		return (NULL);
 	}
 	ptr = NULL;
@@ -114,6 +121,6 @@ void			*malloc(size_t size)
 		allocate_meta();
 	}
 	ptr = (void*)map_data(size);
-	pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(mutex_sglton());
 	return (ptr);
 }

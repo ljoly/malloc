@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 19:48:45 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/08 16:53:25 by ljoly            ###   ########.fr       */
+/*   Updated: 2018/03/23 15:24:43 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,13 @@ static void		*find_ptr(void *ptr, size_t size)
 		{
 			if (g_meta[i].size < size)
 			{
+				pthread_mutex_unlock(mutex_sglton());
 				p = malloc(size);
+				pthread_mutex_lock(mutex_sglton());
 				p = ft_memcpy(p, g_meta[i].ptr, g_meta[i].size);
+				pthread_mutex_unlock(mutex_sglton());
 				free(ptr);
+				pthread_mutex_lock(mutex_sglton());
 			}
 			return (p);
 		}
@@ -42,7 +46,7 @@ void			*realloc(void *ptr, size_t size)
 {
 	void		*p;
 
-	pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(mutex_sglton());
 	p = NULL;
 	if (ptr)
 	{
@@ -50,8 +54,12 @@ void			*realloc(void *ptr, size_t size)
 		{
 			if (!size)
 			{
+				pthread_mutex_unlock(mutex_sglton());
 				p = malloc(TINY_QUANTUM);
+				pthread_mutex_lock(mutex_sglton());
+				pthread_mutex_unlock(mutex_sglton());
 				free(ptr);
+				pthread_mutex_lock(mutex_sglton());
 			}
 			else
 				p = find_ptr(ptr, size);
@@ -59,8 +67,10 @@ void			*realloc(void *ptr, size_t size)
 	}
 	else
 	{
+		pthread_mutex_unlock(mutex_sglton());
 		p = malloc(size);
+		pthread_mutex_lock(mutex_sglton());
 	}
-	pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(mutex_sglton());
 	return (p);
 }

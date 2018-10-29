@@ -55,7 +55,6 @@ typedef struct		s_meta
 }					t_meta;
 
 t_meta				*g_meta;
-pthread_mutex_t		g_mutex;
 
 /*
 ** Specs of the requested zone

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 19:22:18 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:24:47 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/19 17:58:21 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ void			free(void *ptr)
 {
 	size_t		i;
 
-	pthread_mutex_lock(mutex_sglton());
+	ft_putstr("FREE: ");
+	ft_print_hex((size_t)ptr, 0);
+	ft_putendl("\n");
+	// pthread_mutex_lock(mutex_sglton());
 	if (ptr)
 	{
 		if (g_meta)
@@ -66,7 +69,13 @@ void			free(void *ptr)
 				}
 				i++;
 			}
+			// if (i == g_meta[0].type - g_meta[0].size)
+				// ft_putendl("PTR NOT FOUND");
 		}
 	}
-	pthread_mutex_unlock(mutex_sglton());
+	// pthread_mutex_unlock(mutex_sglton());
+	// ft_putstr("META SIZE = ");
+	// ft_putnbr(g_meta[0].size);
+	// ft_putchar('\n');
+	// ft_putendl("FREE OUT");
 }

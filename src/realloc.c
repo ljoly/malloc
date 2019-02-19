@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 19:48:45 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:24:43 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/19 12:22:11 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ void			*realloc(void *ptr, size_t size)
 {
 	void		*p;
 
+	// ft_putendl("REALLOC IN");
+	// ft_print_hex((size_t)ptr, 0);
+
 	pthread_mutex_lock(mutex_sglton());
 	p = NULL;
 	if (ptr)
@@ -72,5 +75,9 @@ void			*realloc(void *ptr, size_t size)
 		pthread_mutex_lock(mutex_sglton());
 	}
 	pthread_mutex_unlock(mutex_sglton());
+	// ft_print_hex((size_t)p, 0);
+	// ((char*)p)[0] = 1;
+	// ft_putendl("REALLOC OUT");
+
 	return (p);
 }

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:23:26 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/19 17:52:45 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,9 @@ static char		*map_data(size_t size)
 		return (r.zone);
 	}
 	else
+	{
 		ptr = map_new_region(&r);
+	}
 	return (ptr);
 }
 
@@ -109,6 +111,9 @@ void			*malloc(size_t size)
 {
 	void		*ptr;
 
+	ft_putstr("MALLOC: ");
+	ft_putnbr(size);
+	ft_putchar('\n');
 	pthread_mutex_lock(mutex_sglton());
 	if ((ssize_t)size < 0)
 	{
@@ -122,5 +127,8 @@ void			*malloc(size_t size)
 	}
 	ptr = (void*)map_data(size);
 	pthread_mutex_unlock(mutex_sglton());
+
+	show_alloc_mem();
+	ft_putendl("\n");
 	return (ptr);
 }

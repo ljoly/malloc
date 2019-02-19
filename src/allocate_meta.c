@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 14:27:49 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/07 19:42:00 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/19 11:51:01 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ static void		extend_meta(void)
 
 void			allocate_meta(void)
 {
+	// ft_putendl("\nALLOCATE META");
 	if (g_meta)
 	{
+		// ft_putendl("EXTEND META");
 		extend_meta();
 	}
 	else

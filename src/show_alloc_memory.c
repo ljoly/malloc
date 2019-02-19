@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:11:09 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/19 18:48:11 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static void			print_block(t_show_blocks to_print, t_show_blocks *last)
 	ft_print_hex((size_t)to_print.end, 1);
 	ft_putstr(": ");
 	ft_putnbr(to_print.size);
-	ft_putendl(" bytes");
+
+	ft_putstr(" bytes");
+	
+	// ft_putendl(" bytes");
 	last->start = to_print.start;
 	last->end = to_print.end;
 	last->size = to_print.size;
@@ -55,6 +58,11 @@ static void			print_mem(t_show_mem mem)
 				(g_meta[i].ptr > last.start && g_meta[i].ptr <= to_print.start))
 			{
 				sort_blocks(&to_print, &last, g_meta[i]);
+				ft_putstr("      size = ");
+				ft_putnbr(g_meta[i].size);
+				if (g_meta[i].type == SMALL_FREED || g_meta[i].type == TINY_FREED)
+					ft_putstr("  >>>FREED");
+				ft_putchar('\n');
 				if (mem.region != LARGE_REGION)
 					i = 0;
 			}
@@ -74,6 +82,25 @@ static void			sort_regions(t_show_mem *mem)
 		{
 			get_region_size(g_meta[i].size, mem);
 			mem->region_ptr = g_meta[i].ptr;
+			
+				if (g_meta[i].type == TINY_REGION)
+	{
+		ft_putstr("TINY: ");
+	}
+	else if (g_meta[i].type == SMALL_REGION)
+	{
+		ft_putstr("SMALL: ");
+	}
+	else if (g_meta[i].type == LARGE_REGION)
+	{
+		ft_putendl("LARGE: ");
+		return ;
+	}
+
+							ft_putstr("      size = ");
+				ft_putnbr(g_meta[i].size);
+				ft_putchar('\n');
+
 			print_mem(*mem);
 			if (is_large(mem->region))
 				break ;

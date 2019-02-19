@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:32:13 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/08 15:56:28 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/19 12:03:51 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ void			map_zone(t_req *r, t_type type, t_bool new_block)
 	i = g_meta[0].type - g_meta[0].size;
 	if (type >= TINY_REGION)
 	{
+		// ft_putstr("MAP NEW REGION: ");
+		// if (type == TINY_REGION)
+			// ft_putendl("TINY");
+		// if (type == SMALL_REGION)
+			// ft_putendl("SMALL");
+
 		g_meta[i].type = type;
 		g_meta[i].ptr = mmap(0, r->region_size, MMAP_FLAGS, -1, 0);
 		g_meta[i].size = r->size_to_map;

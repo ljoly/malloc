@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/20 11:11:23 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/20 19:26:54 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,11 @@ static size_t	get_available_region(t_req *r, t_type type)
 				ft_putendl("FOUND available region");
 
 				r->zone = g_meta[i].ptr + (r->region_size - g_meta[i].size);
+				//update size later with the block size and not size_to_map
 				g_meta[i].size -= r->size_to_map;
+				ft_putstr("ptr found = ");
+				ft_print_hex((size_t)r->zone, 1);
+				ft_putchar('\n');
 				return (i);
 			}
 			i++;
@@ -97,6 +101,7 @@ static char		*map_data(size_t size)
 
 	ptr = NULL;
 	init_request(&r, size);
+	// get region index to update it later
 	if ((get_available_region(&r, r.region)))
 	{
 		if ((get_available_block(&r, r.block)))

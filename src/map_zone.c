@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:32:13 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/19 12:03:51 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/20 10:42:13 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void		update_block(t_req *r, t_type type)
 {
 	g_meta[r->index].type = type;
 	g_meta[r->index].ptr = r->zone;
-	g_meta[r->index].size = r->size_to_map;
+	// g_meta[r->index].size = r->size_to_map;
 	g_meta[r->index].size_request = r->size_request;
 }
 
@@ -46,6 +46,9 @@ void			map_zone(t_req *r, t_type type, t_bool new_block)
 	}
 	else if (new_block)
 	{
+		ft_putstr("Need to add Block ");
+		ft_putnbr(i - 1);
+		ft_putchar('\n');
 		g_meta[i].type = type;
 		g_meta[i].ptr = r->zone;
 		g_meta[i].size = r->size_to_map;

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/19 18:48:11 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/20 10:42:35 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ static void			print_mem(t_show_mem mem)
 	print_region(mem);
 	last.start = NULL;
 	to_print.start = mem.region_ptr;
+	ft_putstr("NUMBER OF BLOCKS: ");
+	ft_putnbr(g_meta[0].type - g_meta[0].size - 2);
+	ft_putchar('\n');
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
 		if ((is_large(g_meta[i].type) && is_large(mem.region)) ||
@@ -83,25 +86,34 @@ static void			sort_regions(t_show_mem *mem)
 			get_region_size(g_meta[i].size, mem);
 			mem->region_ptr = g_meta[i].ptr;
 			
-				if (g_meta[i].type == TINY_REGION)
-	{
-		ft_putstr("TINY: ");
-	}
-	else if (g_meta[i].type == SMALL_REGION)
-	{
-		ft_putstr("SMALL: ");
-	}
-	else if (g_meta[i].type == LARGE_REGION)
-	{
-		ft_putendl("LARGE: ");
-		return ;
-	}
+			if (g_meta[i].type == TINY_REGION)
+			{
+				ft_putstr("TINY: ");
+			}
+			else if (g_meta[i].type == SMALL_REGION)
+			{
+				ft_putstr("SMALL: ");
+			}
+			else if (g_meta[i].type == LARGE_REGION)
+			{
+				ft_putendl("LARGE: ");
+				return ;
+			}
 
-							ft_putstr("      size = ");
-				ft_putnbr(g_meta[i].size);
-				ft_putchar('\n');
+			ft_putstr("      size = ");
+			ft_putnbr(g_meta[i].size);
+			ft_putchar('\n');
 
 			print_mem(*mem);
+
+			ft_putstr("type meta = ");
+			ft_putnbr(g_meta[0].type);
+			ft_putchar('\n');
+
+			ft_putstr("size meta = ");
+			ft_putnbr(g_meta[0].size);
+			ft_putchar('\n');
+
 			if (is_large(mem->region))
 				break ;
 		}

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 12:07:06 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/19 18:46:26 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/20 10:56:13 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void			init_request(t_req *r, size_t size)
 		r->region_size = T_REGION_SIZE;
 		r->block = TINY_FREED;
 
-		ft_putendl("REQ IN TINY_REGION");
+		ft_putendl("Req in TINY REGION");
 	}
 	else if (r->size_to_map <= SMALL_MAX)
 	{
@@ -56,6 +56,6 @@ void			init_request(t_req *r, size_t size)
 		r->region_size = S_REGION_SIZE;
 		r->block = SMALL_FREED;
 
-		ft_putendl("REQ IN SMALL_REGION");
+		ft_putendl("Req in SMALL REGION");
 	}
 }

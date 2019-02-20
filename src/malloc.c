@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/19 17:52:45 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/20 11:11:23 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,18 @@ static size_t	get_available_region(t_req *r, t_type type)
 		{
 			if (g_meta[i].type == type && g_meta[i].size >= r->size_to_map)
 			{
+
+				ft_putendl("FOUND available region");
+
 				r->zone = g_meta[i].ptr + (r->region_size - g_meta[i].size);
 				g_meta[i].size -= r->size_to_map;
 				return (i);
 			}
 			i++;
 		}
+
+		ft_putendl("NOT FOUND available region");
+
 	}
 	return (FALSE);
 }
@@ -40,14 +46,26 @@ static size_t	get_available_block(t_req *r, t_type type)
 	size_t		i;
 
 	i = 1;
+	ft_putstr("Looking for block ");
+	if (type == TINY_FREED)
+		ft_putendl("TINY FREED...");
+	if (type == SMALL_FREED)
+		ft_putendl("SMALL FREED...");
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
 		if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
 		{
+			ft_putstr("...FOUND Block ");
+			ft_putnbr(i - 1);
+			ft_putchar('\n');
 			return (r->index = i);
 		}
 		i++;
 	}
+
+	ft_putendl("...NOT FOUND");
+
+
 	return (FALSE);
 }
 
@@ -95,6 +113,9 @@ static char		*map_data(size_t size)
 	}
 	else
 	{
+		
+		ft_putendl("Did not find available region/Map new one");
+	
 		ptr = map_new_region(&r);
 	}
 	return (ptr);

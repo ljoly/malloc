@@ -6,7 +6,7 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2019/02/19 12:21:18 by ljoly            ###   ########.fr        #
+#    Updated: 2019/02/20 07:01:54 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ fclean: clean
 	# @make -C $(LIBFT) fclean
 	@rm -f $(NAME)
 	@rm -f $(LINK_NAME)
-	@rm -f a.out
+	# @rm -f a.out
 	@printf "$(RED)[-]$(NC)Shared object $(NAME) deleted\n"
 
 re: fclean all

@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 15:25:07 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/21 17:55:17 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,29 @@ static size_t	get_available_region(t_req *r, t_type type)
 			if (g_meta[i].type == type && g_meta[i].size >= r->size_to_map)
 			{
 
-				ft_putendl("FOUND available region");
+				// ft_putendl("FOUND available region");
 
 				r->zone = g_meta[i].ptr + (r->region_size - g_meta[i].size);
-				//update size later with the block size and not size_to_map
+				r->region_index = i;
 				// g_meta[i].size -= r->size_to_map;
-				ft_putstr("ptr found = ");
-				ft_print_hex((size_t)r->zone, 1);
-				ft_putchar('\n');
+
+				// ft_putstr("r->region_size = ");
+				// ft_putnbr(r->region_size);
+				// ft_putchar('\n');
+
+				// ft_putstr("g_meta[i].size = ");
+				// ft_putnbr(g_meta[i].size);
+				// ft_putchar('\n');
+
+				// ft_putstr("ptr found = ");
+				// ft_print_hex((size_t)r->zone, 1);
+				// ft_putchar('\n');
 				return (i);
 			}
 			i++;
 		}
 
-		ft_putendl("NOT FOUND available region");
+		// ft_putendl("NOT FOUND available region");
 
 	}
 	return (FALSE);
@@ -50,24 +59,24 @@ static size_t	get_available_block(t_req *r, t_type type)
 	size_t		i;
 
 	i = 1;
-	ft_putstr("Looking for block ");
-	if (type == TINY_FREED)
-		ft_putendl("TINY FREED...");
-	if (type == SMALL_FREED)
-		ft_putendl("SMALL FREED...");
+	// ft_putstr("Looking for block ");
+	// if (type == TINY_FREED)
+	// 	ft_putendl("TINY FREED...");
+	// if (type == SMALL_FREED)
+	// 	ft_putendl("SMALL FREED...");
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
 		if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
 		{
-			ft_putstr("...FOUND Block ");
-			ft_putnbr(i - 1);
-			ft_putchar('\n');
+			// ft_putstr("...FOUND Block ");
+			// ft_putnbr(i - 1);
+			// ft_putchar('\n');
 			return (r->index = i);
 		}
 		i++;
 	}
 
-	ft_putendl("...NOT FOUND");
+	// ft_putendl("...NOT FOUND");
 
 
 	return (FALSE);
@@ -79,11 +88,21 @@ static char		*map_new_region(t_req *r)
 	char		*ptr;
 
 	i = g_meta[0].type - g_meta[0].size;
+
+	// 		ft_putstr("i = ");
+	// 	ft_putnbr(i);
+	// ft_putchar('\n');
+	
 	map_zone(r, r->region, FALSE);
 	ptr = g_meta[i].ptr;
+
+		// 	ft_putstr("meta.[i].size = ");
+		// ft_putnbr(g_meta[i].size);
+		// ft_putchar('\n');
 	if (r->region != LARGE_REGION)
 	{
-		g_meta[i].size = r->region_size - r->size_to_map;
+		r->region_index = i;
+		// g_meta[i].size = r->region_size - r->size_to_map;
 		r->block = (r->block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;
 		if (!g_meta[0].size)
 		{
@@ -101,7 +120,6 @@ static char		*map_data(size_t size)
 
 	ptr = NULL;
 	init_request(&r, size);
-	// get region index to update it later
 	if ((get_available_region(&r, r.region)))
 	{
 		if ((get_available_block(&r, r.block)))
@@ -119,7 +137,7 @@ static char		*map_data(size_t size)
 	else
 	{
 		
-		ft_putendl("Did not find available region/Map new one");
+		// ft_putendl("Did not find available region/Map new one");
 	
 		ptr = map_new_region(&r);
 	}
@@ -130,9 +148,9 @@ void			*malloc(size_t size)
 {
 	void		*ptr;
 
-	ft_putstr("MALLOC: ");
-	ft_putnbr(size);
-	ft_putchar('\n');
+	// ft_putstr("MALLOC: ");
+	// ft_putnbr(size);
+	// ft_putchar('\n');
 	pthread_mutex_lock(mutex_sglton());
 	if ((ssize_t)size < 0)
 	{
@@ -147,7 +165,7 @@ void			*malloc(size_t size)
 	ptr = (void*)map_data(size);
 	pthread_mutex_unlock(mutex_sglton());
 
-	show_alloc_mem();
-	ft_putendl("\n");
+	// show_alloc_mem();
+	// ft_putendl("\n");
 	return (ptr);
 }

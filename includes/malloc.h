@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 15:25:02 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/21 16:18:29 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,16 @@ typedef struct		s_req
 	t_type			region;
 	t_type			block;
 	size_t			region_size;
+	size_t			region_index;
 	size_t			size_to_map;
 	size_t			size_request;
 	size_t			index;
 	char			*zone;
 }					t_req;
 
+/*
+** Print memory: regions
+*/
 typedef struct		s_show_mem
 {
 	t_type			region;
@@ -77,6 +81,9 @@ typedef struct		s_show_mem
 	char			*region_ptr;
 }					t_show_mem;
 
+/*
+** Print memory: blocks
+*/
 typedef struct		s_show_blocks
 {
 	char			*start;

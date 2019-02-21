@@ -6,7 +6,7 @@
 #    By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/04 11:00:36 by ljoly             #+#    #+#              #
-#    Updated: 2019/02/20 07:01:54 by ljoly            ###   ########.fr        #
+#    Updated: 2019/02/21 16:24:48 by ljoly            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LINK_NAME = libft_malloc.so
 
 
 SRC = malloc.c init.c map_zone.c allocate_meta.c free.c realloc.c \
-	show_alloc_memory.c show_alloc_utils.c \
+	show_alloc_memory.c show_alloc_utils.c handle_multithreading.c \
 	# calloc.c
 
 SRC_PATH = ./src/

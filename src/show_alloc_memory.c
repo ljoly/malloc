@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 17:58:34 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/21 18:14:30 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,11 @@ static void			sort_regions(t_show_mem *mem)
 			// {
 			// 	ft_putstr("SMALL: ");
 			// }
-			else if (g_meta[i].type == LARGE_REGION)
-			{
-				// ft_putendl("LARGE: ");
-				return ;
-			}
+			// else if (g_meta[i].type == LARGE_REGION)
+			// {
+			// 	// ft_putendl("LARGE: ");
+			// 	return ;
+			// }
 
 			// ft_putstr("      size = ");
 			// ft_putnbr(g_meta[i].size);

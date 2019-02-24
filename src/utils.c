@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/23 16:12:50 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/24 16:33:23 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:49:33 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,5 @@ t_bool		is_large(t_type type)
 
 t_bool		is_block(t_type type)
 {
-	return (type == TINY_BLOCK || type == SMALL_BLOCK || type == TINY_FREED || type ==  SMALL_FREED);
-	// return (type == TINY_BLOCK || type == SMALL_BLOCK);
+	return (type == TINY_BLOCK || type == SMALL_BLOCK);
 }

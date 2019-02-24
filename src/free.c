@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 19:22:18 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 17:53:22 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:28:17 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,58 @@ static void		update_region_size(char *ptr, size_t size)
 	size_t		i;
 	size_t		region_size;
 
-					// ft_putstr("size added = ");
-
 	i = 1;
 	region_size = (size <= TINY_MAX ? T_REGION_SIZE : S_REGION_SIZE);
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
-		if ((g_meta[i].type == TINY_REGION || g_meta[i].type == SMALL_REGION) &&
-				ptr - g_meta[i].ptr >= 0 &&
-				ptr - g_meta[i].ptr < (long)region_size)
+		if (g_meta[i].type == TINY_REGION)
 		{
+			region_size = T_REGION_SIZE;
+			if (ptr - g_meta[i].ptr >= 0 &&
+				ptr - g_meta[i].ptr < (long)region_size)
+			{
 
+				// ft_putstr("size added = ");
 				// ft_putnbr(size);
 				// ft_putchar('\n');
 
-			g_meta[i].size += size;
-			break ;
+				// ft_putstr("to region index = ");
+				// ft_putnbr(i);
+				// ft_putchar('\n');
+
+
+				g_meta[i].size += size;
+				break ;
+			}
 		}
+		else if (g_meta[i].type == SMALL_REGION)
+		{
+			region_size = S_REGION_SIZE;
+			if (ptr - g_meta[i].ptr >= 0 &&
+				ptr - g_meta[i].ptr < (long)region_size)
+			{
+				
+				// ft_putstr("size added = ");
+				// ft_putnbr(size);
+				// ft_putchar('\n');
+
+				// ft_putstr("to region index = ");
+				// ft_putnbr(i);
+				// ft_putchar('\n');
+
+				g_meta[i].size += size;
+				break ;
+			}
+		}
+				// ft_putstr("sub = ");
+				// ft_putnbr(ptr - g_meta[i].ptr);
+				// ft_putchar('\n');
+			
+				// ft_putstr("region size = ");
+				// ft_putnbr(region_size);
+				// ft_putchar('\n');
+
+
 		i++;
 	}
 }
@@ -76,7 +111,7 @@ void			free(void *ptr)
 				i++;
 			}
 			// if (i == g_meta[0].type - g_meta[0].size)
-			// 	ft_putendl("PTR NOT FOUND");
+				// ft_putendl("PTR NOT FOUND");
 		}
 	}
 
@@ -85,8 +120,4 @@ void			free(void *ptr)
 
 	// 		show_alloc_mem();
 	// ft_putendl("\n");
-	// ft_putstr("META SIZE = ");
-	// ft_putnbr(g_meta[0].size);
-	// ft_putchar('\n');
-	// ft_putendl("FREE OUT");
 }

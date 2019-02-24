@@ -1,6 +1,6 @@
 # malloc
 
-Recoding the famous memory allocation function, along with realloc and free
+Recoding the famous memory allocation function, along with realloc, calloc and free
 
 Optimized page reclaim system  
 Low/No cache miss  

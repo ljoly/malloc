@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:52:44 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 16:18:29 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:37:07 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,14 @@ typedef struct		s_req
 {
 	t_type			region;
 	t_type			block;
-	size_t			region_size;
+	size_t			region_size_total;
+	size_t			region_size_used;
 	size_t			region_index;
+	char			*region_ptr;
 	size_t			size_to_map;
 	size_t			size_request;
-	size_t			index;
-	char			*zone;
+	size_t			block_index;
+	void			*block_ptr;
 }					t_req;
 
 /*
@@ -94,7 +96,7 @@ typedef struct		s_show_blocks
 void				free(void *ptr);
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
-// void				*calloc(size_t count, size_t size);
+void				*calloc(size_t count, size_t size);
 
 void				init_request(t_req *r, size_t size);
 void				allocate_meta(void);
@@ -103,7 +105,7 @@ void				map_zone(t_req *r, t_type type, t_bool new_block);
 void				show_alloc_mem();
 void				get_region_size(size_t size, t_show_mem *mem);
 t_bool				is_block(t_type type);
-t_bool				is_in_region(t_show_mem mem, char *ptr);
+t_bool				is_in_region(char *region_ptr, long region_size, char *ptr);
 t_bool				is_large(t_type type);
 void				print_region(t_show_mem mem);
 

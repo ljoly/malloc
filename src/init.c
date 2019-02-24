@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 12:07:06 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 17:54:57 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 15:40:22 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,17 @@ void			init_request(t_req *r, size_t size)
 	r->size_request = size;
 	r->size_to_map = quantum_size_to_map(size);
 	r->region = LARGE_REGION;
+	r->region_size_total = size;
+	r->region_size_used = 0;
+	r->region_ptr = NULL;
+	r->region_index = 1;
 	r->block = LARGE_FREED;
-	r->region_size = size;
-	r->region_index = 0;
-	r->index = 0;
-	r->zone = NULL;
+	r->block_index = 1;
+	r->block_ptr = NULL;
 	if (r->size_to_map <= TINY_MAX)
 	{
 		r->region = TINY_REGION;
-		r->region_size = T_REGION_SIZE;
+		r->region_size_total = T_REGION_SIZE;
 		r->block = TINY_FREED;
 
 		// ft_putendl("Req in TINY REGION");
@@ -54,7 +56,7 @@ void			init_request(t_req *r, size_t size)
 	else if (r->size_to_map <= SMALL_MAX)
 	{
 		r->region = SMALL_REGION;
-		r->region_size = S_REGION_SIZE;
+		r->region_size_total = S_REGION_SIZE;
 		r->block = SMALL_FREED;
 
 		// ft_putendl("Req in SMALL REGION");

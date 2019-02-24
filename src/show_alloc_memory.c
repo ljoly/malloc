@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:11:09 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:49:18 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static void			print_mem(t_show_mem mem)
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
 		if ((is_large(g_meta[i].type) && is_large(mem.region)) ||
-			((is_block(g_meta[i].type) && is_in_region(mem, g_meta[i].ptr))))
+			((is_block(g_meta[i].type) &&
+				is_in_region(mem.region_ptr, mem.region_size, g_meta[i].ptr))))
 		{
 			if ((is_large(mem.region) && g_meta[i].ptr > last.start) ||
 				(g_meta[i].ptr > last.start && g_meta[i].ptr <= to_print.start))

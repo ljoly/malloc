@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/04 10:46:02 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:23:26 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:47:55 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static size_t	get_available_region(t_req *r, t_type type)
 		{
 			if (g_meta[i].type == type && g_meta[i].size >= r->size_to_map)
 			{
-				r->zone = g_meta[i].ptr + (r->region_size - g_meta[i].size);
-				g_meta[i].size -= r->size_to_map;
+				r->region_index = i;
+				r->region_ptr = g_meta[i].ptr;
 				return (i);
 			}
 			i++;
@@ -42,9 +42,15 @@ static size_t	get_available_block(t_req *r, t_type type)
 	i = 1;
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
-		if (g_meta[i].type == type && g_meta[i].ptr == r->zone)
+		if ((g_meta[i].type == type || g_meta[i].type == type - 2) &&
+			is_in_region(r->region_ptr, r->region_size_total, g_meta[i].ptr))
 		{
-			return (r->index = i);
+			if (g_meta[i].type == type && g_meta[i].size >= r->size_to_map)
+			{
+				r->block_ptr = g_meta[i].ptr;
+				return (r->block_index = i);
+			}
+			r->region_size_used += g_meta[i].size;
 		}
 		i++;
 	}
@@ -61,7 +67,8 @@ static char		*map_new_region(t_req *r)
 	ptr = g_meta[i].ptr;
 	if (r->region != LARGE_REGION)
 	{
-		g_meta[i].size = r->region_size - r->size_to_map;
+		r->region_index = i;
+		r->region_ptr = ptr;
 		r->block = (r->block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;
 		if (!g_meta[0].size)
 		{
@@ -72,9 +79,9 @@ static char		*map_new_region(t_req *r)
 	return (ptr);
 }
 
-static char		*map_data(size_t size)
+static void		*get_available_zone(size_t size)
 {
-	char		*ptr;
+	void		*ptr;
 	t_req		r;
 
 	ptr = NULL;
@@ -91,18 +98,13 @@ static char		*map_data(size_t size)
 			r.block = (r.block == TINY_FREED) ? TINY_BLOCK : SMALL_BLOCK;
 			map_zone(&r, r.block, TRUE);
 		}
-		return (r.zone);
+		return (r.block_ptr);
 	}
 	else
+	{
 		ptr = map_new_region(&r);
+	}
 	return (ptr);
-}
-
-pthread_mutex_t        *mutex_sglton(void)
-{
-	static pthread_mutex_t    mutex = PTHREAD_MUTEX_INITIALIZER;
-
-	return (&mutex);
 }
 
 void			*malloc(size_t size)
@@ -120,7 +122,7 @@ void			*malloc(size_t size)
 	{
 		allocate_meta();
 	}
-	ptr = (void*)map_data(size);
+	ptr = get_available_zone(size);
 	pthread_mutex_unlock(mutex_sglton());
 	return (ptr);
 }

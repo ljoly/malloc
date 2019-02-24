@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 19:22:18 by ljoly             #+#    #+#             */
-/*   Updated: 2018/03/23 15:24:47 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:46:49 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,25 @@ static void		update_region_size(char *ptr, size_t size)
 	region_size = (size <= TINY_MAX ? T_REGION_SIZE : S_REGION_SIZE);
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
-		if ((g_meta[i].type == TINY_REGION || g_meta[i].type == SMALL_REGION) &&
-				ptr - g_meta[i].ptr >= 0 &&
-				ptr - g_meta[i].ptr < (long)region_size)
+		if (g_meta[i].type == TINY_REGION)
 		{
-			g_meta[i].size += size;
-			break ;
+			region_size = T_REGION_SIZE;
+			if (ptr - g_meta[i].ptr >= 0 &&
+				ptr - g_meta[i].ptr < (long)region_size)
+			{
+				g_meta[i].size += size;
+				break ;
+			}
+		}
+		else if (g_meta[i].type == SMALL_REGION)
+		{
+			region_size = S_REGION_SIZE;
+			if (ptr - g_meta[i].ptr >= 0 &&
+				ptr - g_meta[i].ptr < (long)region_size)
+			{
+				g_meta[i].size += size;
+				break ;
+			}
 		}
 		i++;
 	}

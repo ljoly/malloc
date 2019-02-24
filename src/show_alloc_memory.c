@@ -6,7 +6,7 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 17:55:47 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/21 18:14:30 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:45:01 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ static void			print_block(t_show_blocks to_print, t_show_blocks *last)
 	ft_print_hex((size_t)to_print.end, 1);
 	ft_putstr(": ");
 	ft_putnbr(to_print.size);
-
-	ft_putstr(" bytes");
-	
-	// ft_putendl(" bytes");
+	ft_putendl(" bytes");
 	last->start = to_print.start;
 	last->end = to_print.end;
 	last->size = to_print.size;
@@ -55,7 +52,8 @@ static void			print_mem(t_show_mem mem)
 	while (i < g_meta[0].type - g_meta[0].size)
 	{
 		if ((is_large(g_meta[i].type) && is_large(mem.region)) ||
-			((is_block(g_meta[i].type) && is_in_region(mem, g_meta[i].ptr))))
+			((is_block(g_meta[i].type) &&
+				is_in_region(mem.region_ptr, mem.region_size, g_meta[i].ptr))))
 		{
 			if ((is_large(mem.region) && g_meta[i].ptr > last.start) ||
 				(g_meta[i].ptr > last.start && g_meta[i].ptr <= to_print.start))
@@ -86,6 +84,7 @@ static void			sort_regions(t_show_mem *mem)
 			get_region_size(g_meta[i].size, mem);
 			mem->region_ptr = g_meta[i].ptr;
 			
+			// ft_putendl("SHOW ALLOC");
 			// if (g_meta[i].type == TINY_REGION)
 			// {
 			// 	ft_putstr("TINY: ");
@@ -94,9 +93,9 @@ static void			sort_regions(t_show_mem *mem)
 			// {
 			// 	ft_putstr("SMALL: ");
 			// }
-			// else if (g_meta[i].type == LARGE_REGION)
+			// if (g_meta[i].type == LARGE_REGION)
 			// {
-			// 	// ft_putendl("LARGE: ");
+			// 	ft_putendl("LARGE: ");
 			// 	return ;
 			// }
 

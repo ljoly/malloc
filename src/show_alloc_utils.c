@@ -6,44 +6,27 @@
 /*   By: ljoly <ljoly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 22:16:07 by ljoly             #+#    #+#             */
-/*   Updated: 2019/02/19 18:43:15 by ljoly            ###   ########.fr       */
+/*   Updated: 2019/02/24 16:29:22 by ljoly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_bool		is_in_region(t_show_mem mem, char *ptr)
-{
-	return (ptr - mem.region_ptr >= 0 &&
-		ptr - mem.region_ptr < (long)mem.region_size);
-}
-
-t_bool		is_large(t_type type)
-{
-	return (type == LARGE_REGION);
-}
-
-t_bool		is_block(t_type type)
-{
-	return (type == TINY_BLOCK || type == SMALL_BLOCK || type == TINY_FREED || type ==  SMALL_FREED);
-	// return (type == TINY_BLOCK || type == SMALL_BLOCK);
-}
-
 void		print_region(t_show_mem mem)
 {
-	// if (mem.region == TINY_REGION)
-	// {
-	// 	ft_putstr("TINY: ");
-	// }
-	// else if (mem.region == SMALL_REGION)
-	// {
-	// 	ft_putstr("SMALL: ");
-	// }
-	// else if (mem.region == LARGE_REGION)
-	// {
-	// 	ft_putendl("LARGE: ");
-	// 	return ;
-	// }
+	if (mem.region == TINY_REGION)
+	{
+		ft_putstr("TINY: ");
+	}
+	else if (mem.region == SMALL_REGION)
+	{
+		ft_putstr("SMALL: ");
+	}
+	else if (mem.region == LARGE_REGION)
+	{
+		ft_putendl("LARGE: ");
+		return ;
+	}
 	ft_putstr("0x");
 	ft_print_hex((size_t)mem.region_ptr, 1);
 	ft_putchar('\n');
